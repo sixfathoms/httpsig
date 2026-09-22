@@ -10,10 +10,10 @@ sidebar_position: 5
 
 ```kotlin
 dependencies {
-    implementation("io.zrz:httpsig-kotlin")
+    implementation("dev.sixfathoms:httpsig-kotlin")
 
     // Optional: OkHttp integration
-    implementation("io.zrz:httpsig-kotlin-okhttp")
+    implementation("dev.sixfathoms:httpsig-kotlin-okhttp")
 }
 ```
 
@@ -22,7 +22,7 @@ Requires Kotlin 2.1.10+, JVM target 17. Uses the same JCA cryptographic provider
 ## Quick Example: Sign a Request
 
 ```kotlin
-import io.zrz.httpsig.*
+import dev.sixfathoms.httpsig.*
 import java.time.Instant
 
 // Create a key pair (auto-detects algorithm from JCA key type)
@@ -50,7 +50,7 @@ request.addHeader("Signature", Signer.signatureHeader(result))
 ## Quick Example: Verify a Signature
 
 ```kotlin
-import io.zrz.httpsig.*
+import dev.sixfathoms.httpsig.*
 
 // Set up a KeyProvider (auto-detects algorithm from JCA key type)
 val provider = KeyProvider { keyId, _ ->
@@ -80,7 +80,7 @@ println("Verified: label=${result.label}, keyId=${result.keyId}")
 ### OkHttp
 
 ```kotlin
-import io.zrz.httpsig.okhttp.SigningInterceptor
+import dev.sixfathoms.httpsig.okhttp.SigningInterceptor
 
 val interceptor = SigningInterceptor(
     key = signingKey,

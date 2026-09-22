@@ -7,7 +7,7 @@ sidebar_position: 2
 ## Installation
 
 ```bash
-npm install @zourzouvillys/httpsig
+npm install @sixfathoms/httpsig
 ```
 
 Requires Node.js 20 or later. The package is ESM-only.
@@ -15,9 +15,9 @@ Requires Node.js 20 or later. The package is ESM-only.
 ## Quick Example: Sign a Request
 
 ```typescript
-import { signMessage, signatureInputHeader, signatureHeader } from '@zourzouvillys/httpsig';
-import { newKeyPair } from '@zourzouvillys/httpsig';
-import { component } from '@zourzouvillys/httpsig';
+import { signMessage, signatureInputHeader, signatureHeader } from '@sixfathoms/httpsig';
+import { newKeyPair } from '@sixfathoms/httpsig';
+import { component } from '@sixfathoms/httpsig';
 import * as crypto from 'node:crypto';
 
 // Create a key pair (auto-detects algorithm from key type)
@@ -58,10 +58,10 @@ Note that all sign and verify operations are `async` to support Web Crypto API b
 ## Quick Example: Verify a Signature
 
 ```typescript
-import { verifyMessage } from '@zourzouvillys/httpsig';
-import { newVerifyingKey } from '@zourzouvillys/httpsig';
-import { component } from '@zourzouvillys/httpsig';
-import type { KeyProvider } from '@zourzouvillys/httpsig';
+import { verifyMessage } from '@sixfathoms/httpsig';
+import { newVerifyingKey } from '@sixfathoms/httpsig';
+import { component } from '@sixfathoms/httpsig';
+import type { KeyProvider } from '@sixfathoms/httpsig';
 
 // Set up a KeyProvider (auto-detects algorithm from key type)
 const provider: KeyProvider = async (keyId, algorithm) => {
@@ -87,7 +87,7 @@ console.log(`Verified: label=${result.label}, keyId=${result.keyId}`);
 ### fetch
 
 ```typescript
-import { createSigningFetch } from '@zourzouvillys/httpsig/fetch';
+import { createSigningFetch } from '@sixfathoms/httpsig/fetch';
 
 const signedFetch = createSigningFetch({ key: myKey });
 const response = await signedFetch('https://example.com/api', {
@@ -101,7 +101,7 @@ const response = await signedFetch('https://example.com/api', {
 
 ```typescript
 import axios from 'axios';
-import { addSigningInterceptor } from '@zourzouvillys/httpsig/axios';
+import { addSigningInterceptor } from '@sixfathoms/httpsig/axios';
 
 const client = axios.create({ baseURL: 'https://api.example.com' });
 addSigningInterceptor(client, { key: myKey });
@@ -113,7 +113,7 @@ const response = await client.post('/resource', { data: 'value' });
 
 ```typescript
 import { request } from 'undici';
-import { createSigningRequest } from '@zourzouvillys/httpsig/undici';
+import { createSigningRequest } from '@sixfathoms/httpsig/undici';
 
 const signedRequest = createSigningRequest(request, { key: myKey });
 const { statusCode, body } = await signedRequest('https://example.com/api');
@@ -126,7 +126,7 @@ See the [Integrations Guide](/guides/integrations) for more details.
 For browser or edge runtimes, use the Web Crypto adapters:
 
 ```typescript
-import { newWebCryptoSigningKey, newWebCryptoVerifyingKey } from '@zourzouvillys/httpsig';
+import { newWebCryptoSigningKey, newWebCryptoVerifyingKey } from '@sixfathoms/httpsig';
 
 const cryptoKey = await crypto.subtle.generateKey('Ed25519', true, ['sign', 'verify']);
 

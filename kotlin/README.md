@@ -7,11 +7,11 @@ Kotlin JVM implementation of [HTTP Message Signatures (RFC 9421)](https://www.rf
 ### Gradle
 
 ```kotlin
-implementation("io.zrz:httpsig-kotlin:0.1.0")
+implementation("dev.sixfathoms:httpsig-kotlin:0.1.0")
 
 // Optional integrations
-implementation("io.zrz:httpsig-kotlin-okhttp:0.1.0")
-implementation("io.zrz:httpsig-kotlin-ktor:0.1.0")
+implementation("dev.sixfathoms:httpsig-kotlin-okhttp:0.1.0")
+implementation("dev.sixfathoms:httpsig-kotlin-ktor:0.1.0")
 ```
 
 Requires JVM 17+. Kotlin 2.1+.
@@ -21,7 +21,7 @@ Requires JVM 17+. Kotlin 2.1+.
 ### Signing
 
 ```kotlin
-import io.zrz.httpsig.*
+import dev.sixfathoms.httpsig.*
 
 val key = Keys.ed25519Signing("my-key-id", privateKey)
 
@@ -43,7 +43,7 @@ headers["Signature"] = Signer.signatureHeader(result)
 ### Verification
 
 ```kotlin
-import io.zrz.httpsig.*
+import dev.sixfathoms.httpsig.*
 
 // KeyProvider is a fun interface, supports lambda
 val provider = KeyProvider { keyId, _ ->
@@ -61,7 +61,7 @@ val result = Verifier.verify(message, provider, VerifyOptions(
 #### OkHttp
 
 ```kotlin
-import io.zrz.httpsig.okhttp.SigningInterceptor
+import dev.sixfathoms.httpsig.okhttp.SigningInterceptor
 
 val interceptor = SigningInterceptor(
     key = signingKey,
@@ -83,7 +83,7 @@ val client = OkHttpClient.Builder()
 #### Ktor
 
 ```kotlin
-import io.zrz.httpsig.ktor.HttpSig
+import dev.sixfathoms.httpsig.ktor.HttpSig
 
 val client = HttpClient(CIO) {
     install(HttpSig) {

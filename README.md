@@ -1,10 +1,10 @@
 # httpsig
 
-[![Go](https://github.com/zourzouvillys/httpsig/actions/workflows/go.yml/badge.svg)](https://github.com/zourzouvillys/httpsig/actions/workflows/go.yml)
-[![TypeScript](https://github.com/zourzouvillys/httpsig/actions/workflows/typescript.yml/badge.svg)](https://github.com/zourzouvillys/httpsig/actions/workflows/typescript.yml)
-[![Java](https://github.com/zourzouvillys/httpsig/actions/workflows/java.yml/badge.svg)](https://github.com/zourzouvillys/httpsig/actions/workflows/java.yml)
-[![Swift](https://github.com/zourzouvillys/httpsig/actions/workflows/swift.yml/badge.svg)](https://github.com/zourzouvillys/httpsig/actions/workflows/swift.yml)
-[![Kotlin](https://github.com/zourzouvillys/httpsig/actions/workflows/kotlin.yml/badge.svg)](https://github.com/zourzouvillys/httpsig/actions/workflows/kotlin.yml)
+[![Go](https://github.com/sixfathoms/httpsig/actions/workflows/go.yml/badge.svg)](https://github.com/sixfathoms/httpsig/actions/workflows/go.yml)
+[![TypeScript](https://github.com/sixfathoms/httpsig/actions/workflows/typescript.yml/badge.svg)](https://github.com/sixfathoms/httpsig/actions/workflows/typescript.yml)
+[![Java](https://github.com/sixfathoms/httpsig/actions/workflows/java.yml/badge.svg)](https://github.com/sixfathoms/httpsig/actions/workflows/java.yml)
+[![Swift](https://github.com/sixfathoms/httpsig/actions/workflows/swift.yml/badge.svg)](https://github.com/sixfathoms/httpsig/actions/workflows/swift.yml)
+[![Kotlin](https://github.com/sixfathoms/httpsig/actions/workflows/kotlin.yml/badge.svg)](https://github.com/sixfathoms/httpsig/actions/workflows/kotlin.yml)
 
 Multi-language [HTTP Message Signatures (RFC 9421)](https://www.rfc-editor.org/rfc/rfc9421) library with [Content-Digest (RFC 9530)](https://www.rfc-editor.org/rfc/rfc9530) support.
 
@@ -12,11 +12,11 @@ Multi-language [HTTP Message Signatures (RFC 9421)](https://www.rfc-editor.org/r
 
 | Language | Package | Integrations |
 |---|---|---|
-| [Go](golang/) | `go get github.com/zourzouvillys/httpsig/golang` | net/http middleware |
-| [TypeScript](typescript/) | `npm install @zourzouvillys/httpsig` | fetch, axios, undici |
-| [Java](java/) | `io.zrz:httpsig` | OkHttp, JDK HttpClient, Spring WebClient |
-| [Swift](swift/) | SPM: `github.com/zourzouvillys/httpsig` | URLSession, Alamofire |
-| [Kotlin](kotlin/) | `io.zrz:httpsig-kotlin` | OkHttp, Ktor |
+| [Go](golang/) | `go get github.com/sixfathoms/httpsig/golang` | net/http middleware |
+| [TypeScript](typescript/) | `npm install @sixfathoms/httpsig` | fetch, axios, undici |
+| [Java](java/) | `dev.sixfathoms:httpsig` | OkHttp, JDK HttpClient, Spring WebClient |
+| [Swift](swift/) | SPM: `github.com/sixfathoms/httpsig` | URLSession, Alamofire |
+| [Kotlin](kotlin/) | `dev.sixfathoms:httpsig-kotlin` | OkHttp, Ktor |
 
 ## Features
 
@@ -32,7 +32,7 @@ Multi-language [HTTP Message Signatures (RFC 9421)](https://www.rfc-editor.org/r
 ### Go
 
 ```go
-import "github.com/zourzouvillys/httpsig/golang"
+import "github.com/sixfathoms/httpsig/golang"
 
 key, _ := httpsig.NewEd25519SigningKey("my-key-id", privateKey)
 
@@ -51,7 +51,7 @@ sig, _ := httpsig.SignMessage(msg, "sig1", params, key)
 ### TypeScript
 
 ```typescript
-import { signMessage, Algorithm } from '@zourzouvillys/httpsig';
+import { signMessage, Algorithm } from '@sixfathoms/httpsig';
 
 const result = await signMessage(message, 'sig1', {
   components: ['@method', '@authority', 'content-type'],
@@ -102,7 +102,7 @@ val result = Signer.sign(message, "sig1", params, signingKey)
 
 ## Documentation
 
-Full documentation is available at the [docs site](https://zourzouvillys.github.io/httpsig/), including getting started guides, concept explanations, and integration walkthroughs.
+Full documentation is available at the [docs site](https://zrz.io/httpsig/), including getting started guides, concept explanations, and integration walkthroughs.
 
 ## License
 

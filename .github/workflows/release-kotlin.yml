@@ -47,5 +47,5 @@ jobs:
 
             ```kotlin
             // Gradle
-            implementation("io.zrz:httpsig-kotlin:${{ steps.version.outputs.version }}")
+            implementation("dev.sixfathoms:httpsig-kotlin:${{ steps.version.outputs.version }}")
             ```

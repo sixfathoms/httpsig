@@ -7,7 +7,7 @@ Works on both sides of the wire: clients sign outgoing requests and verify incom
 ## Install
 
 ```bash
-go get github.com/zourzouvillys/httpsig/golang
+go get github.com/sixfathoms/httpsig/golang
 ```
 
 Requires Go 1.22+.
@@ -32,7 +32,7 @@ import (
     "net/http"
     "time"
 
-    "github.com/zourzouvillys/httpsig/golang"
+    "github.com/sixfathoms/httpsig/golang"
 )
 
 func main() {

@@ -68,7 +68,7 @@ if err != nil {
 import {
   verifyMessage, buildAcceptSignature,
   component, type SignatureRequirements,
-} from '@zourzouvillys/httpsig';
+} from '@sixfathoms/httpsig';
 
 const reqs: SignatureRequirements = {
   components: [component('@method'), component('@authority'), component('content-digest')],
@@ -191,7 +191,7 @@ if entry, ok := reqs["sig1"]; ok {
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-import { parseAcceptSignature, toSignatureParameters, signMessage } from '@zourzouvillys/httpsig';
+import { parseAcceptSignature, toSignatureParameters, signMessage } from '@sixfathoms/httpsig';
 
 const reqs = parseAcceptSignature(response.headers.get('Accept-Signature')!);
 const entry = reqs['sig1'];

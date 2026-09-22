@@ -10,12 +10,12 @@ sidebar_position: 3
 
 ```kotlin
 dependencies {
-    implementation("io.zrz:httpsig")
+    implementation("dev.sixfathoms:httpsig")
 
     // Optional integrations (pick what you need):
-    implementation("io.zrz:httpsig-okhttp")
-    implementation("io.zrz:httpsig-jdk-http")
-    implementation("io.zrz:httpsig-spring-webclient")
+    implementation("dev.sixfathoms:httpsig-okhttp")
+    implementation("dev.sixfathoms:httpsig-jdk-http")
+    implementation("dev.sixfathoms:httpsig-spring-webclient")
 }
 ```
 
@@ -23,7 +23,7 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation 'io.zrz:httpsig'
+    implementation 'dev.sixfathoms:httpsig'
 }
 ```
 
@@ -32,7 +32,7 @@ Requires Java 17 or later.
 ## Quick Example: Sign a Request
 
 ```java
-import io.zrz.httpsig.*;
+import dev.sixfathoms.httpsig.*;
 import java.time.Instant;
 
 // Create a key pair (auto-detects algorithm from JCA key type)
@@ -60,7 +60,7 @@ request.addHeader("Signature", Signer.signatureHeader(result));
 ## Quick Example: Verify a Signature
 
 ```java
-import io.zrz.httpsig.*;
+import dev.sixfathoms.httpsig.*;
 
 // Set up a KeyProvider (auto-detects algorithm from JCA key type)
 KeyProvider provider = (keyId, algorithm) -> {
@@ -89,7 +89,7 @@ Java has three integration modules:
 ### OkHttp
 
 ```java
-import io.zrz.httpsig.okhttp.SigningInterceptor;
+import dev.sixfathoms.httpsig.okhttp.SigningInterceptor;
 
 var interceptor = new SigningInterceptor(
     signingKey,
@@ -109,7 +109,7 @@ var client = new OkHttpClient.Builder()
 ### JDK HttpClient
 
 ```java
-import io.zrz.httpsig.jdkhttp.HttpSigning;
+import dev.sixfathoms.httpsig.jdkhttp.HttpSigning;
 
 var builder = HttpRequest.newBuilder()
     .uri(URI.create("https://example.com/api"))
@@ -124,7 +124,7 @@ var request = builder.build();
 ### Spring WebClient
 
 ```java
-import io.zrz.httpsig.spring.SigningFilterFunction;
+import dev.sixfathoms.httpsig.spring.SigningFilterFunction;
 
 var filter = new SigningFilterFunction(
     signingKey,

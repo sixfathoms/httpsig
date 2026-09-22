@@ -13,7 +13,7 @@ Each language provides drop-in integrations with popular HTTP clients. These han
 `Transport` wraps any `http.RoundTripper` to sign outgoing requests:
 
 ```go
-import "github.com/zourzouvillys/httpsig/golang"
+import "github.com/sixfathoms/httpsig/golang"
 
 client := &http.Client{
     Transport: &httpsig.Transport{
@@ -78,7 +78,7 @@ http.ListenAndServe(":8080", middleware.Wrap(mux))
 `createSigningFetch` returns a `fetch`-compatible function:
 
 ```typescript
-import { createSigningFetch } from '@zourzouvillys/httpsig/fetch';
+import { createSigningFetch } from '@sixfathoms/httpsig/fetch';
 
 const signedFetch = createSigningFetch({
   key: signingKey,
@@ -109,7 +109,7 @@ const response = await signedFetch('https://example.com/api', {
 
 ```typescript
 import axios from 'axios';
-import { addSigningInterceptor } from '@zourzouvillys/httpsig/axios';
+import { addSigningInterceptor } from '@sixfathoms/httpsig/axios';
 
 const client = axios.create({ baseURL: 'https://api.example.com' });
 
@@ -131,7 +131,7 @@ const response = await client.post('/resource', { data: 'value' });
 
 ```typescript
 import { request } from 'undici';
-import { createSigningRequest } from '@zourzouvillys/httpsig/undici';
+import { createSigningRequest } from '@sixfathoms/httpsig/undici';
 
 const signedRequest = createSigningRequest(request, {
   key: signingKey,
@@ -149,7 +149,7 @@ const { statusCode, body } = await signedRequest('https://example.com/api', {
 `SigningInterceptor` implements OkHttp's `Interceptor` interface:
 
 ```java
-import io.zrz.httpsig.okhttp.SigningInterceptor;
+import dev.sixfathoms.httpsig.okhttp.SigningInterceptor;
 
 var interceptor = new SigningInterceptor(
     signingKey,
@@ -179,7 +179,7 @@ var response = client.newCall(request).execute();
 `HttpSigning` signs a `HttpRequest.Builder` in place:
 
 ```java
-import io.zrz.httpsig.jdkhttp.HttpSigning;
+import dev.sixfathoms.httpsig.jdkhttp.HttpSigning;
 
 var builder = HttpRequest.newBuilder()
     .uri(URI.create("https://example.com/api"))
@@ -197,7 +197,7 @@ var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 `SigningFilterFunction` implements `ExchangeFilterFunction`:
 
 ```java
-import io.zrz.httpsig.spring.SigningFilterFunction;
+import dev.sixfathoms.httpsig.spring.SigningFilterFunction;
 
 var filter = new SigningFilterFunction(
     signingKey,
@@ -270,7 +270,7 @@ let response = await session.request(
 The Kotlin OkHttp integration mirrors the Java one with Kotlin-idiomatic syntax:
 
 ```kotlin
-import io.zrz.httpsig.okhttp.SigningInterceptor
+import dev.sixfathoms.httpsig.okhttp.SigningInterceptor
 
 val interceptor = SigningInterceptor(
     key = signingKey,
@@ -303,9 +303,9 @@ val response = client.newCall(request).execute()
 |------------|---------------------|----------------------------|-----------------------------------------|
 | Go         | net/http (client)   | `Transport` (RoundTripper) | `httpsig`                               |
 | Go         | net/http (server)   | `RequireSignature` middleware | `httpsig`                            |
-| TypeScript | fetch               | Wrapper function           | `@zourzouvillys/httpsig/fetch`          |
-| TypeScript | axios               | Request interceptor        | `@zourzouvillys/httpsig/axios`          |
-| TypeScript | undici              | Wrapper function           | `@zourzouvillys/httpsig/undici`         |
+| TypeScript | fetch               | Wrapper function           | `@sixfathoms/httpsig/fetch`          |
+| TypeScript | axios               | Request interceptor        | `@sixfathoms/httpsig/axios`          |
+| TypeScript | undici              | Wrapper function           | `@sixfathoms/httpsig/undici`         |
 | Java       | OkHttp              | `Interceptor`              | `httpsig-okhttp`                        |
 | Java       | JDK HttpClient      | Builder helper             | `httpsig-jdk-http`                      |
 | Java       | Spring WebClient    | `ExchangeFilterFunction`   | `httpsig-spring-webclient`              |

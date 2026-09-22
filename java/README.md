@@ -7,19 +7,19 @@ Java implementation of [HTTP Message Signatures (RFC 9421)](https://www.rfc-edit
 ### Gradle
 
 ```kotlin
-implementation("io.zrz:httpsig:0.1.0")
+implementation("dev.sixfathoms:httpsig:0.1.0")
 
 // Optional integrations
-implementation("io.zrz:httpsig-okhttp:0.1.0")
-implementation("io.zrz:httpsig-jdk-http:0.1.0")
-implementation("io.zrz:httpsig-spring-webclient:0.1.0")
+implementation("dev.sixfathoms:httpsig-okhttp:0.1.0")
+implementation("dev.sixfathoms:httpsig-jdk-http:0.1.0")
+implementation("dev.sixfathoms:httpsig-spring-webclient:0.1.0")
 ```
 
 ### Maven
 
 ```xml
 <dependency>
-  <groupId>io.zrz</groupId>
+  <groupId>dev.sixfathoms</groupId>
   <artifactId>httpsig</artifactId>
   <version>0.1.0</version>
 </dependency>
@@ -32,7 +32,7 @@ Requires Java 17+.
 ### Signing
 
 ```java
-import io.zrz.httpsig.*;
+import dev.sixfathoms.httpsig.*;
 
 var key = Keys.ed25519Signing("my-key-id", privateKey);
 

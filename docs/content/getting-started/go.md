@@ -7,7 +7,7 @@ sidebar_position: 1
 ## Installation
 
 ```bash
-go get github.com/zourzouvillys/httpsig/golang
+go get github.com/sixfathoms/httpsig/golang
 ```
 
 Requires Go 1.22 or later. The package name is `httpsig`.
@@ -23,7 +23,7 @@ import (
     "net/http"
     "time"
 
-    "github.com/zourzouvillys/httpsig/golang"
+    "github.com/sixfathoms/httpsig/golang"
 )
 
 func main() {
@@ -75,7 +75,7 @@ import (
     "fmt"
     "time"
 
-    "github.com/zourzouvillys/httpsig/golang"
+    "github.com/sixfathoms/httpsig/golang"
 )
 
 func main() {

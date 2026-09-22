@@ -2,7 +2,7 @@ name: Release Go
 
 on:
   push:
-    tags: ['go/v*']
+    tags: ['golang/v*']
 
 jobs:
   release:
@@ -22,7 +22,7 @@ jobs:
 
       - name: Extract version
         id: version
-        run: echo "version=${GITHUB_REF#refs/tags/go/}" >> "$GITHUB_OUTPUT"
+        run: echo "version=${GITHUB_REF#refs/tags/golang/}" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
@@ -34,7 +34,7 @@ jobs:
             ## Go ${{ steps.version.outputs.version }}
 
             ```bash
-            go get github.com/zourzouvillys/httpsig/golang@${{ steps.version.outputs.version }}
+            go get github.com/sixfathoms/httpsig/golang@${{ steps.version.outputs.version }}
             ```
 
             Go modules are published automatically via [proxy.golang.org](https://proxy.golang.org).

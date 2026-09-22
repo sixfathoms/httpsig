@@ -12,7 +12,7 @@ cd kotlin
 
 ## Conventions
 
-- Package: `io.zrz.httpsig`
+- Package: `dev.sixfathoms.httpsig`
 - JVM-only (not KMP), Kotlin 2.1.10, JVM target 17
 - Gradle multi-module with version catalog at `gradle/libs.versions.toml`
 - `Algorithm` is a sealed class with `data object` singletons (not enum)
@@ -44,8 +44,8 @@ cd kotlin
 
 | Module | Package | Pattern |
 |---|---|---|
-| `integrations/okhttp` | `io.zrz.httpsig.okhttp` | `SigningInterceptor` implements OkHttp `Interceptor` |
-| `integrations/ktor` | `io.zrz.httpsig.ktor` | `HttpSig` plugin via `createClientPlugin` |
+| `integrations/okhttp` | `dev.sixfathoms.httpsig.okhttp` | `SigningInterceptor` implements OkHttp `Interceptor` |
+| `integrations/ktor` | `dev.sixfathoms.httpsig.ktor` | `HttpSig` plugin via `createClientPlugin` |
 
 - OkHttp 4.12.0, Ktor 3.0.3
 - Adapters (`OkHttpMessage`, `KtorMessage`) are `internal`

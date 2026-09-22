@@ -52,5 +52,5 @@ jobs:
             ## TypeScript v${{ steps.version.outputs.version }}
 
             ```bash
-            npm install @zourzouvillys/httpsig@${{ steps.version.outputs.version }}
+            npm install @sixfathoms/httpsig@${{ steps.version.outputs.version }}
             ```

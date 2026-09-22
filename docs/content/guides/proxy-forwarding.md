@@ -204,7 +204,7 @@ import {
   signatureHeader,
   component,
   componentWithKey,
-} from '@zourzouvillys/httpsig';
+} from '@sixfathoms/httpsig';
 
 async function proxyRequest(
   incomingHeaders: Headers,
@@ -279,7 +279,7 @@ async function proxyRequest(
 <TabItem value="java" label="Java">
 
 ```java
-import io.zrz.httpsig.*;
+import dev.sixfathoms.httpsig.*;
 import java.time.Instant;
 import java.util.List;
 
@@ -409,7 +409,7 @@ func proxyRequest(
 <TabItem value="kotlin" label="Kotlin">
 
 ```kotlin
-import io.zrz.httpsig.*
+import dev.sixfathoms.httpsig.*
 import java.time.Duration
 import java.time.Instant
 

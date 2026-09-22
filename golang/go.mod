@@ -1,3 +1,3 @@
-module github.com/zourzouvillys/httpsig/golang
+module github.com/sixfathoms/httpsig/golang
 
 go 1.22
