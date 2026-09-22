@@ -11,7 +11,7 @@ go vet ./...           # static analysis
 ## Conventions
 
 - Package: `httpsig`
-- Module path: `github.com/zourzouvillys/httpsig/golang`
+- Module path: `github.com/sixfathoms/httpsig/golang`
 - Go 1.22+, zero external dependencies
 - `KeyProvider` is a function type: `func(keyID string, algorithm Algorithm) (VerifyingKey, error)`
 - `NewKeyPair()` auto-detects algorithm from `crypto.PrivateKey`; `NewHMACKeyPair()` for symmetric

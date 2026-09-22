@@ -8,7 +8,7 @@ Swift implementation of [HTTP Message Signatures (RFC 9421)](https://www.rfc-edi
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/zourzouvillys/httpsig.git", from: "0.1.0")
+    .package(url: "https://github.com/sixfathoms/httpsig.git", from: "0.1.0")
 ]
 ```
 

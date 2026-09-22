@@ -31,8 +31,8 @@ provider := func(keyID string, alg httpsig.Algorithm) (httpsig.VerifyingKey, err
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-import type { KeyProvider } from '@zourzouvillys/httpsig';
-import { newVerifyingKey } from '@zourzouvillys/httpsig';
+import type { KeyProvider } from '@sixfathoms/httpsig';
+import { newVerifyingKey } from '@sixfathoms/httpsig';
 
 const provider: KeyProvider = async (keyId, algorithm) => {
   const publicKey = await loadPublicKey(keyId);
@@ -105,8 +105,8 @@ opts := &httpsig.VerifyOptions{
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-import type { VerifyOptions } from '@zourzouvillys/httpsig';
-import { component } from '@zourzouvillys/httpsig';
+import type { VerifyOptions } from '@sixfathoms/httpsig';
+import { component } from '@sixfathoms/httpsig';
 
 const opts: VerifyOptions = {
   requiredComponents: [component('@method'), component('@authority')],
@@ -182,7 +182,7 @@ fmt.Printf("Verified: label=%s, keyId=%s, algorithm=%s\n",
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-import { verifyMessage } from '@zourzouvillys/httpsig';
+import { verifyMessage } from '@sixfathoms/httpsig';
 
 try {
   const result = await verifyMessage(msg, provider, opts);

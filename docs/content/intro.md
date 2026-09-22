@@ -102,11 +102,11 @@ Simple session cookies may still be the right choice for low-stakes browser sess
 
 | Language | Package | Integrations |
 |---|---|---|
-| Go | `github.com/zourzouvillys/httpsig/golang` | net/http (RoundTripper + Handler middleware) |
-| TypeScript | `@zourzouvillys/httpsig` | fetch, axios, undici |
-| Java | `io.zrz:httpsig` | OkHttp, JDK HttpClient, Spring WebClient |
+| Go | `github.com/sixfathoms/httpsig/golang` | net/http (RoundTripper + Handler middleware) |
+| TypeScript | `@sixfathoms/httpsig` | fetch, axios, undici |
+| Java | `dev.sixfathoms:httpsig` | OkHttp, JDK HttpClient, Spring WebClient |
 | Swift | `HTTPSig` (SPM) | URLSession, Alamofire |
-| Kotlin | `io.zrz:httpsig-kotlin` | OkHttp, Ktor |
+| Kotlin | `dev.sixfathoms:httpsig-kotlin` | OkHttp, Ktor |
 
 All five implementations share the same test vectors derived from RFC 9421 Appendix B, ensuring cross-language interoperability.
 

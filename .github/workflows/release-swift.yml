@@ -32,7 +32,7 @@ jobs:
             ```swift
             // Package.swift
             dependencies: [
-                .package(url: "https://github.com/zourzouvillys/httpsig.git", from: "${{ steps.version.outputs.version }}")
+                .package(url: "https://github.com/sixfathoms/httpsig.git", from: "${{ steps.version.outputs.version }}")
             ]
             ```
 

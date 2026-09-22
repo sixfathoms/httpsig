@@ -38,7 +38,7 @@ httpsig.ComponentReqWithKey("signature", "sig1")       // "signature";req;key="s
 
 ```typescript
 // TypeScript
-import { component, queryParam, componentReq, componentWithKey, componentReqWithKey } from '@zourzouvillys/httpsig';
+import { component, queryParam, componentReq, componentWithKey, componentReqWithKey } from '@sixfathoms/httpsig';
 
 component('@method');
 component('@authority');

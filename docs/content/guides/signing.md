@@ -19,7 +19,7 @@ import TabItem from '@theme/TabItem';
 ```go
 import (
     "crypto/ed25519"
-    "github.com/zourzouvillys/httpsig/golang"
+    "github.com/sixfathoms/httpsig/golang"
 )
 
 _, privateKey, _ := ed25519.GenerateKey(nil)
@@ -32,7 +32,7 @@ key := kp.Signing // use kp.Verifying for verification
 
 ```typescript
 import * as crypto from 'node:crypto';
-import { newKeyPair } from '@zourzouvillys/httpsig';
+import { newKeyPair } from '@sixfathoms/httpsig';
 
 const { privateKey } = crypto.generateKeyPairSync('ed25519');
 const kp = newKeyPair('my-key-id', privateKey);
@@ -43,7 +43,7 @@ const key = kp.signingKey; // use kp.verifyingKey for verification
 <TabItem value="java" label="Java">
 
 ```java
-import io.zrz.httpsig.Keys;
+import dev.sixfathoms.httpsig.Keys;
 import java.security.KeyPairGenerator;
 
 var jcaKp = KeyPairGenerator.getInstance("Ed25519").generateKeyPair();
@@ -67,7 +67,7 @@ let key = kp.signingKey // use kp.verifyingKey for verification
 <TabItem value="kotlin" label="Kotlin">
 
 ```kotlin
-import io.zrz.httpsig.Keys
+import dev.sixfathoms.httpsig.Keys
 import java.security.KeyPairGenerator
 
 val jcaKp = KeyPairGenerator.getInstance("Ed25519").generateKeyPair()
@@ -102,7 +102,7 @@ params := httpsig.SignatureParameters{
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-import { component } from '@zourzouvillys/httpsig';
+import { component } from '@sixfathoms/httpsig';
 
 const params = {
   components: [
@@ -120,7 +120,7 @@ const params = {
 <TabItem value="java" label="Java">
 
 ```java
-import io.zrz.httpsig.SignatureParameters;
+import dev.sixfathoms.httpsig.SignatureParameters;
 import java.time.Instant;
 
 var params = SignatureParameters.builder()
@@ -153,7 +153,7 @@ let params = SignatureParameters(
 <TabItem value="kotlin" label="Kotlin">
 
 ```kotlin
-import io.zrz.httpsig.SignatureParameters
+import dev.sixfathoms.httpsig.SignatureParameters
 import java.time.Instant
 
 val params = SignatureParameters.builder()
@@ -189,7 +189,7 @@ req.Header.Set("Signature", httpsig.SignatureHeader(result))
 <TabItem value="typescript" label="TypeScript">
 
 ```typescript
-import { signMessage, signatureInputHeader, signatureHeader } from '@zourzouvillys/httpsig';
+import { signMessage, signatureInputHeader, signatureHeader } from '@sixfathoms/httpsig';
 
 const msg = {
   isRequest: true,
@@ -213,7 +213,7 @@ headers['Signature'] = signatureHeader(result);
 <TabItem value="java" label="Java">
 
 ```java
-import io.zrz.httpsig.Signer;
+import dev.sixfathoms.httpsig.Signer;
 
 Signer.SignResult result = Signer.sign(httpMessage, "sig1", params, key, null);
 
@@ -235,7 +235,7 @@ request.addValue(Signer.signatureHeader(result), forHTTPHeaderField: "Signature"
 <TabItem value="kotlin" label="Kotlin">
 
 ```kotlin
-import io.zrz.httpsig.Signer
+import dev.sixfathoms.httpsig.Signer
 
 val result = Signer.sign(httpMessage, "sig1", params, key)
 

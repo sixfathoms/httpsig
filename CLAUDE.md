@@ -16,10 +16,10 @@ Monorepo with five language implementations sharing test vectors:
 ```
 httpsig/
   golang/          Go (package httpsig, Go 1.22+)
-  typescript/      TypeScript (@zourzouvillys/httpsig, Node 20+, ESM)
-  java/            Java (io.zrz.httpsig, Java 17+, Gradle)
+  typescript/      TypeScript (@sixfathoms/httpsig, Node 20+, ESM)
+  java/            Java (dev.sixfathoms.httpsig, Java 17+, Gradle)
   swift/           Swift (HTTPSig, macOS 13+/iOS 16+, SPM, Swift 6.0)
-  kotlin/          Kotlin JVM (io.zrz.httpsig, JVM 17+, Gradle)
+  kotlin/          Kotlin JVM (dev.sixfathoms.httpsig, JVM 17+, Gradle)
   testdata/        Shared RFC 9421 test vectors (all languages load these)
   docs/            Static docs site + interactive RFC 9421 playground (custom generator)
   .github/         CI workflows + GitHub templates
@@ -91,11 +91,11 @@ Each language implements the same core abstractions:
 | `kotlin.yml` | push/PR to `kotlin/**` | Kotlin tests (JDK 17+21) |
 | `docs.yml` | push/PR to `docs/**` or `typescript/**` | Docs build + GitHub Pages deploy |
 | `cross-language.yml` | Weekly (Mon 6am UTC) | All 5 languages test suite |
-| `release-*.yml` | Tag push (`go/v*`, `ts/v*`, etc.) | Release + publish |
+| `release-*.yml` | Tag push (`golang/v*`, `ts/v*`, etc.) | Release + publish |
 
 ## Release Tags
 
-Convention: `{lang}/v{semver}` (e.g. `go/v1.0.0`, `ts/v1.0.0`, `java/v1.0.0`, `swift/v1.0.0`, `kotlin/v1.0.0`).
+Convention: `{lang}/v{semver}` (e.g. `ts/v1.0.0`, `java/v1.0.0`, `swift/v1.0.0`, `kotlin/v1.0.0`). Go is `golang/v{semver}` (e.g. `golang/v1.0.0`): the Go toolchain reads a sub-directory module's versions only from tags prefixed with that directory, so a `go/v…` tag is invisible to `go get`.
 
 ## Conventions
 

@@ -5,7 +5,7 @@ TypeScript implementation of [HTTP Message Signatures (RFC 9421)](https://www.rf
 ## Install
 
 ```bash
-npm install @zourzouvillys/httpsig
+npm install @sixfathoms/httpsig
 ```
 
 Requires Node.js 20+. ESM-only.
@@ -15,8 +15,8 @@ Requires Node.js 20+. ESM-only.
 ### Signing
 
 ```typescript
-import { signMessage, signatureInputHeader, signatureHeader } from '@zourzouvillys/httpsig';
-import { newEd25519SigningKey } from '@zourzouvillys/httpsig';
+import { signMessage, signatureInputHeader, signatureHeader } from '@sixfathoms/httpsig';
+import { newEd25519SigningKey } from '@sixfathoms/httpsig';
 
 const key = newEd25519SigningKey('my-key-id', privateKeyObject);
 
@@ -38,7 +38,7 @@ headers.set('Signature', signatureHeader(result));
 ### Verification
 
 ```typescript
-import { verifyMessage } from '@zourzouvillys/httpsig';
+import { verifyMessage } from '@sixfathoms/httpsig';
 
 const provider = async (keyId: string) => {
   return newEd25519VerifyingKey(keyId, publicKeyObject);
@@ -55,7 +55,7 @@ const result = await verifyMessage(message, provider, {
 #### fetch
 
 ```typescript
-import { createSigningFetch } from '@zourzouvillys/httpsig/fetch';
+import { createSigningFetch } from '@sixfathoms/httpsig/fetch';
 
 const signedFetch = createSigningFetch({ key: myKey });
 const response = await signedFetch('https://example.com/api', { method: 'POST' });
@@ -64,7 +64,7 @@ const response = await signedFetch('https://example.com/api', { method: 'POST' }
 #### axios
 
 ```typescript
-import { addSigningInterceptor } from '@zourzouvillys/httpsig/axios';
+import { addSigningInterceptor } from '@sixfathoms/httpsig/axios';
 
 addSigningInterceptor(axiosInstance, {
   key: myKey,
@@ -79,7 +79,7 @@ addSigningInterceptor(axiosInstance, {
 #### undici
 
 ```typescript
-import { createSigningRequest } from '@zourzouvillys/httpsig/undici';
+import { createSigningRequest } from '@sixfathoms/httpsig/undici';
 
 const req = createSigningRequest('https://example.com/api', {
   method: 'POST',
@@ -92,7 +92,7 @@ const req = createSigningRequest('https://example.com/api', {
 ### Auto-Detection (Recommended)
 
 ```typescript
-import { newKeyPair, newSigningKey, newVerifyingKey } from '@zourzouvillys/httpsig';
+import { newKeyPair, newSigningKey, newVerifyingKey } from '@sixfathoms/httpsig';
 
 // KeyPair from private key (auto-detects algorithm, derives public key)
 const kp = newKeyPair('my-key-id', privateKeyObject);
@@ -110,7 +110,7 @@ const hmacKp = newHMACKeyPair('my-key-id', secret);
 For browser or edge runtime environments:
 
 ```typescript
-import { newWebCryptoSigningKey, newWebCryptoVerifyingKey } from '@zourzouvillys/httpsig';
+import { newWebCryptoSigningKey, newWebCryptoVerifyingKey } from '@sixfathoms/httpsig';
 
 const signing = newWebCryptoSigningKey('my-key-id', cryptoKey, 'ed25519');
 const verifying = newWebCryptoVerifyingKey('my-key-id', cryptoKey, 'ed25519');

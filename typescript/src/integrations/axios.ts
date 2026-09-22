@@ -43,7 +43,7 @@ export interface AxiosSigningOptions {
  *
  * ```ts
  * import axios from 'axios';
- * import { addSigningInterceptor } from '@zourzouvillys/httpsig/axios';
+ * import { addSigningInterceptor } from '@sixfathoms/httpsig/axios';
  *
  * const client = axios.create({ baseURL: 'https://api.example.com' });
  * addSigningInterceptor(client, { key: myKey });

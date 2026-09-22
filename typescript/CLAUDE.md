@@ -12,7 +12,7 @@ npm run build           # compile to dist/
 
 ## Conventions
 
-- Package: `@zourzouvillys/httpsig`, ESM-only
+- Package: `@sixfathoms/httpsig`, ESM-only
 - Node.js 20+, zero runtime dependencies (axios is an optional peer dep)
 - All sign/verify APIs are `async` (returns `Promise`) for future Web Crypto compatibility
 - `newKeyPair()` / `newSigningKey()` / `newVerifyingKey()` auto-detect algorithm from `KeyObject`
@@ -24,7 +24,7 @@ npm run build           # compile to dist/
 - `KeyProvider` is `(keyId: string, algorithm?: string) => Promise<VerifyingKey | null>`
 - `VerifyOptions.maxClockSkewMs` rejects future-dated `created` timestamps
 - Verifier checks `alg` parameter against resolved key's `algorithm` and returns key-derived values in `VerifyResult`
-- Integration sub-paths: `@zourzouvillys/httpsig/fetch`, `/axios`, `/undici`
+- Integration sub-paths: `@sixfathoms/httpsig/fetch`, `/axios`, `/undici`
 - Tests use vitest, files at `test/*.test.ts`
 - `vector.test.ts` loads shared vectors from `../testdata/vectors/*.json`
 

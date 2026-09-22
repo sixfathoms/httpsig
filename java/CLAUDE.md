@@ -10,7 +10,7 @@ cd java
 
 ## Conventions
 
-- Package: `io.zrz.httpsig`
+- Package: `dev.sixfathoms.httpsig`
 - Java 17+, Gradle multi-module
 - `SignatureParameters` uses builder pattern: `.builder().component("@method").keyId("x").created(Instant.now()).build()`
 - `ComponentIdentifier` is a Java record with `Map<String, Object>` params
@@ -37,9 +37,9 @@ cd java
 
 | Module | Package | Pattern |
 |---|---|---|
-| `integrations/okhttp` | `io.zrz.httpsig.okhttp` | `SigningInterceptor` implements `Interceptor` |
-| `integrations/jdk-http` | `io.zrz.httpsig.jdkhttp` | `HttpSigning.sign(HttpRequest.Builder, ...)` static method |
-| `integrations/spring-webclient` | `io.zrz.httpsig.spring` | `SigningFilterFunction` implements `ExchangeFilterFunction` |
+| `integrations/okhttp` | `dev.sixfathoms.httpsig.okhttp` | `SigningInterceptor` implements `Interceptor` |
+| `integrations/jdk-http` | `dev.sixfathoms.httpsig.jdkhttp` | `HttpSigning.sign(HttpRequest.Builder, ...)` static method |
+| `integrations/spring-webclient` | `dev.sixfathoms.httpsig.spring` | `SigningFilterFunction` implements `ExchangeFilterFunction` |
 
 ## Key files
 

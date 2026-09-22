@@ -211,7 +211,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import java.security.KeyPairGenerator
 import java.security.KeyStore
-import io.zrz.httpsig.Keys
+import dev.sixfathoms.httpsig.Keys
 
 // Generate a key in the Android Keystore
 val keyGen = KeyPairGenerator.getInstance(
@@ -235,7 +235,7 @@ val signingKey = Keys.signingKey("my-key-id", privateKey) // auto-detects ECDSA 
 TypeScript's sign/verify operations are `async` specifically to support the Web Crypto API. Built-in adapters wrap `CryptoKey` instances:
 
 ```typescript
-import { newWebCryptoSigningKey, newWebCryptoVerifyingKey } from '@zourzouvillys/httpsig';
+import { newWebCryptoSigningKey, newWebCryptoVerifyingKey } from '@sixfathoms/httpsig';
 
 const signingKey = newWebCryptoSigningKey('my-key', cryptoKey, 'ed25519');
 const verifyingKey = newWebCryptoVerifyingKey('my-key', cryptoKey, 'ed25519');

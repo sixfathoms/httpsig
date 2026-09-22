@@ -141,7 +141,7 @@ import {
   componentReq,
   componentReqWithKey,
   buildResponseMessage,
-} from '@zourzouvillys/httpsig';
+} from '@sixfathoms/httpsig';
 
 async function handleRequest(
   reqMsg: HttpMessage,
@@ -196,7 +196,7 @@ async function handleRequest(
 <TabItem value="java" label="Java">
 
 ```java
-import io.zrz.httpsig.*;
+import dev.sixfathoms.httpsig.*;
 import java.time.Instant;
 
 Signer.SignResult signResponse(
@@ -257,7 +257,7 @@ func signResponse(
 <TabItem value="kotlin" label="Kotlin">
 
 ```kotlin
-import io.zrz.httpsig.*
+import dev.sixfathoms.httpsig.*
 import java.time.Instant
 
 fun signResponse(

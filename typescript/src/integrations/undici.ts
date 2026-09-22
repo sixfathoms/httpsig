@@ -39,7 +39,7 @@ export interface UndiciSigningOptions {
  *
  * ```ts
  * import { request } from 'undici';
- * import { createSigningRequest } from '@zourzouvillys/httpsig/undici';
+ * import { createSigningRequest } from '@sixfathoms/httpsig/undici';
  *
  * const signedRequest = createSigningRequest(request, { key: myKey });
  * const { statusCode, body } = await signedRequest('https://example.com/api');

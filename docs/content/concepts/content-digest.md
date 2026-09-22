@@ -39,7 +39,7 @@ Content-Digest: sha-256=:X48E9qOokqqrvdts8nOJRJN3OWDUoyWxBf7kbu9DBPE=:
 ### Go
 
 ```go
-import "github.com/zourzouvillys/httpsig/golang"
+import "github.com/sixfathoms/httpsig/golang"
 
 body := []byte(`{"hello": "world"}`)
 digest, err := httpsig.ContentDigest(body, httpsig.DigestSHA256)
@@ -49,7 +49,7 @@ digest, err := httpsig.ContentDigest(body, httpsig.DigestSHA256)
 ### TypeScript
 
 ```typescript
-import { contentDigest } from '@zourzouvillys/httpsig';
+import { contentDigest } from '@sixfathoms/httpsig';
 
 const body = new TextEncoder().encode('{"hello": "world"}');
 const digest = contentDigest(body, 'sha-256');
@@ -58,7 +58,7 @@ const digest = contentDigest(body, 'sha-256');
 ### Java
 
 ```java
-import io.zrz.httpsig.ContentDigest;
+import dev.sixfathoms.httpsig.ContentDigest;
 
 byte[] body = "{\"hello\": \"world\"}".getBytes();
 String digest = ContentDigest.compute(body, "sha-256");
@@ -81,7 +81,7 @@ if !valid {
 ### TypeScript
 
 ```typescript
-import { verifyContentDigest } from '@zourzouvillys/httpsig';
+import { verifyContentDigest } from '@sixfathoms/httpsig';
 
 const valid = verifyContentDigest(body, headerValue);
 ```

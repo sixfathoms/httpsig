@@ -29,7 +29,7 @@ const LIB_ENTRY = join(SITE_DIR, '..', 'typescript', 'src', 'index.ts');
 // Base path the site is published under. Empty for local dev; "/httpsig" on
 // GitHub Pages (set by the `build` npm script / CI).
 const BASE = (process.env.BASE_PATH || '').replace(/\/$/, '');
-const GITHUB = 'https://github.com/zourzouvillys/httpsig';
+const GITHUB = 'https://github.com/sixfathoms/httpsig';
 
 // ---- Top navigation (site header) ----
 const NAV = [

@@ -16,9 +16,7 @@ If you discover a security vulnerability in this project, please report it respo
 
 **Do not open a public GitHub issue for security vulnerabilities.**
 
-Instead, use [GitHub Security Advisories](https://github.com/zourzouvillys/httpsig/security/advisories/new) to report vulnerabilities privately. This ensures the report is only visible to maintainers until a fix is available.
-
-Alternatively, email security reports to: **security@zourzouvillys.com**
+Instead, use [GitHub Security Advisories](https://github.com/sixfathoms/httpsig/security/advisories/new) to report vulnerabilities privately. This ensures the report is only visible to maintainers until a fix is available.
 
 ### What to include
 
