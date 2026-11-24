@@ -129,10 +129,15 @@ object Verifier {
         val metaParams = innerList.params
         val created = timestamp(metaParams, "created")
         val expires = timestamp(metaParams, "expires")
-        val nonce = metaParams["nonce"] as? String
-        val keyId = metaParams["keyid"] as? String
-        val algStr = metaParams["alg"] as? String
-        val algorithm = algStr?.let { Algorithm.fromValue(it) }
+        val nonce = stringParam(metaParams, "nonce")
+        val keyId = stringParam(metaParams, "keyid")
+        val algStr = stringParam(metaParams, "alg")
+        val tag = stringParam(metaParams, "tag")
+        val algorithm = try {
+            algStr?.let { Algorithm.fromValue(it) }
+        } catch (e: IllegalArgumentException) {
+            throw HttpSigException("unknown algorithm: $algStr", e)
+        }
 
         // check requirements (takes precedence) or fall back to requiredComponents
         val reqs = options.requirements
@@ -154,7 +159,6 @@ object Verifier {
                 throw HttpSigException("algorithm mismatch: expected ${reqs.algorithm.value} but signature has ${algorithm.value}")
             }
             // filter by tag
-            val tag = metaParams["tag"] as? String
             if (reqs.tag != null && reqs.tag != tag) {
                 throw HttpSigException("tag mismatch: expected '${reqs.tag}' but signature has '$tag'")
             }
@@ -225,6 +229,12 @@ object Verifier {
             expires = expires,
             nonce = nonce,
         )
+    }
+
+    private fun stringParam(params: SFV.Params, key: String): String? = when (val v = params[key]) {
+        null -> null
+        is String -> v
+        else -> throw HttpSigException("$key must be a string")
     }
 
     private fun timestamp(params: SFV.Params, key: String): Long? = when (val v = params[key]) {

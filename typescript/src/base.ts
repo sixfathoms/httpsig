@@ -2,6 +2,7 @@ import type {
   ComponentIdentifier,
   HttpMessage,
   SignatureParameters,
+  SFVInnerList,
   SFVParams,
 } from "./types.js";
 import { DuplicateComponentError, MalformedInputError } from "./errors.js";
@@ -9,6 +10,7 @@ import {
   newSFVParams,
   sfvParamsSet,
   serializeComponentId,
+  serializeInnerList,
   serializeSignatureParams,
 } from "./sfv.js";
 import { extractComponent } from "./components.js";
@@ -22,19 +24,57 @@ export function buildSignatureBase(
   params: SignatureParameters,
   reqMsg?: HttpMessage,
 ): [Uint8Array, string] {
-  validateComponents(params.components);
+  const sigParamsValue = serializeSignatureParams(
+    params.components,
+    buildSFVParams(params),
+  );
+  return [
+    buildBase(params.components, sigParamsValue, msg, reqMsg),
+    sigParamsValue,
+  ];
+}
 
+/**
+ * Build the signature base for verifying a received signature. The inner list
+ * is the parsed Signature-Input member: the signature covers its parameters in
+ * the order the sender wrote them.
+ */
+export function buildSignatureBaseForVerification(
+  msg: HttpMessage,
+  innerList: SFVInnerList,
+  reqMsg?: HttpMessage,
+): Uint8Array {
+  return buildBase(
+    parseComponents(innerList),
+    serializeInnerList(innerList),
+    msg,
+    reqMsg,
+  );
+}
+
+export function parseComponents(innerList: SFVInnerList): ComponentIdentifier[] {
+  return innerList.items.map(({ value, params }) => {
+    if (typeof value !== "string") {
+      throw new MalformedInputError("component identifier must be a string");
+    }
+    return { name: value, params };
+  });
+}
+
+function buildBase(
+  components: ComponentIdentifier[],
+  sigParamsValue: string,
+  msg: HttpMessage,
+  reqMsg?: HttpMessage,
+): Uint8Array {
+  validateComponents(components);
   let base = "";
-  for (const c of params.components) {
+  for (const c of components) {
     const value = extractComponent(c, msg, reqMsg);
     base += serializeComponentId(c) + ": " + value + "\n";
   }
-
-  const sfvParams = buildSFVParams(params);
-  const sigParamsValue = serializeSignatureParams(params.components, sfvParams);
   base += '"@signature-params": ' + sigParamsValue;
-
-  return [new TextEncoder().encode(base), sigParamsValue];
+  return new TextEncoder().encode(base);
 }
 
 function buildSFVParams(params: SignatureParameters): SFVParams {

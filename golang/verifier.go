@@ -191,7 +191,7 @@ func VerifyMessage(msg Message, provider KeyProvider, opts *VerifyOptions, reqMs
 		}
 
 		// Build signature base and verify
-		base, _, err := BuildSignatureBase(msg, sigParams, reqMsg)
+		base, err := buildBase(msg, components, serializeInnerList(member.InnerList), reqMsg)
 		if err != nil {
 			continue
 		}
@@ -264,24 +264,32 @@ func parseSignatureParams(params *SFVParams, components []ComponentIdentifier) (
 		sp.Expires = &n
 	}
 	if v, ok := params.Get("nonce"); ok {
-		if s, ok := v.(string); ok {
-			sp.Nonce = &s
+		s, ok := v.(string)
+		if !ok {
+			return sp, fmt.Errorf("%w: nonce must be a string", ErrMalformedSignatureInput)
 		}
+		sp.Nonce = &s
 	}
 	if v, ok := params.Get("alg"); ok {
-		if s, ok := v.(string); ok {
-			sp.Algorithm = Algorithm(s)
+		s, ok := v.(string)
+		if !ok {
+			return sp, fmt.Errorf("%w: alg must be a string", ErrMalformedSignatureInput)
 		}
+		sp.Algorithm = Algorithm(s)
 	}
 	if v, ok := params.Get("keyid"); ok {
-		if s, ok := v.(string); ok {
-			sp.KeyID = s
+		s, ok := v.(string)
+		if !ok {
+			return sp, fmt.Errorf("%w: keyid must be a string", ErrMalformedSignatureInput)
 		}
+		sp.KeyID = s
 	}
 	if v, ok := params.Get("tag"); ok {
-		if s, ok := v.(string); ok {
-			sp.Tag = &s
+		s, ok := v.(string)
+		if !ok {
+			return sp, fmt.Errorf("%w: tag must be a string", ErrMalformedSignatureInput)
 		}
+		sp.Tag = &s
 	}
 	return sp, nil
 }

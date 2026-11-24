@@ -63,7 +63,10 @@ export {
 } from "./components.js";
 
 // Signature base
-export { buildSignatureBase } from "./base.js";
+export {
+  buildSignatureBase,
+  buildSignatureBaseForVerification,
+} from "./base.js";
 
 // Signer
 export { signMessage, signatureInputHeader, signatureHeader } from "./signer.js";

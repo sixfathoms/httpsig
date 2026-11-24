@@ -3,6 +3,7 @@ import type {
   ComponentIdentifier,
   HttpMessage,
   KeyProvider,
+  SFVParams,
   SignatureParameters,
   SignatureRequirements,
   VerifyOptions,
@@ -14,7 +15,11 @@ import {
   MalformedInputError,
 } from "./errors.js";
 import { parseDictionary, serializeComponentId, sfvParamsGet } from "./sfv.js";
-import { buildSignatureBase, requireInteger } from "./base.js";
+import {
+  buildSignatureBaseForVerification,
+  parseComponents,
+  requireInteger,
+} from "./base.js";
 
 /**
  * Verify a signature on a message.
@@ -70,7 +75,7 @@ export async function verifyMessage(
 
     let components: ComponentIdentifier[];
     try {
-      components = parseComponentsFromInnerList(member.innerList);
+      components = parseComponents(member.innerList);
     } catch {
       continue;
     }
@@ -114,7 +119,7 @@ export async function verifyMessage(
 
     let base: Uint8Array;
     try {
-      [base] = buildSignatureBase(msg, sigParams, reqMsg);
+      base = buildSignatureBaseForVerification(msg, member.innerList, reqMsg);
     } catch {
       continue;
     }
@@ -127,7 +132,7 @@ export async function verifyMessage(
     }
     if (!valid) continue;
 
-    if (opts?.nonceChecker && sigParams.nonce) {
+    if (opts?.nonceChecker && sigParams.nonce !== undefined) {
       await opts.nonceChecker(sigParams.nonce, key.keyId, key.algorithm);
     }
 
@@ -145,17 +150,8 @@ export async function verifyMessage(
   throw new InvalidSignatureError();
 }
 
-function parseComponentsFromInnerList(
-  il: { items: Array<{ value: unknown; params?: import("./types.js").SFVParams }> },
-): ComponentIdentifier[] {
-  return il.items.map((item) => {
-    const name = typeof item.value === "string" ? item.value : String(item.value);
-    return { name, params: item.params };
-  });
-}
-
 function parseSignatureParams(
-  params: import("./types.js").SFVParams | undefined,
+  params: SFVParams | undefined,
   components: ComponentIdentifier[],
 ): SignatureParameters {
   const sp: SignatureParameters = {
@@ -170,19 +166,20 @@ function parseSignatureParams(
   const expires = sfvParamsGet(params, "expires");
   if (expires !== undefined) sp.expires = requireInteger("expires", expires);
 
-  const nonce = sfvParamsGet(params, "nonce");
-  if (typeof nonce === "string") sp.nonce = nonce;
-
-  const alg = sfvParamsGet(params, "alg");
-  if (typeof alg === "string") sp.algorithm = alg as Algorithm;
-
-  const keyid = sfvParamsGet(params, "keyid");
-  if (typeof keyid === "string") sp.keyId = keyid;
-
-  const tag = sfvParamsGet(params, "tag");
-  if (typeof tag === "string") sp.tag = tag;
+  sp.nonce = stringParam(params, "nonce");
+  sp.algorithm = stringParam(params, "alg") as Algorithm | undefined;
+  sp.keyId = stringParam(params, "keyid") ?? "";
+  sp.tag = stringParam(params, "tag");
 
   return sp;
+}
+
+function stringParam(params: SFVParams, key: string): string | undefined {
+  const value = sfvParamsGet(params, key);
+  if (value !== undefined && typeof value !== "string") {
+    throw new MalformedInputError(`${key} must be a string`);
+  }
+  return value;
 }
 
 function hasRequiredComponents(

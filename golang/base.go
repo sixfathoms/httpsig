@@ -22,16 +22,27 @@ type SignatureParameters struct {
 // BuildSignatureBase constructs the signature base string per RFC 9421 Section 2.5.
 // The reqMsg parameter is only needed for response signatures with ;req components.
 func BuildSignatureBase(msg Message, params SignatureParameters, reqMsg Message) ([]byte, string, error) {
-	if err := validateComponents(params.Components); err != nil {
+	sigParamsValue := SerializeSignatureParams(params.Components, buildSFVParams(params))
+	base, err := buildBase(msg, params.Components, sigParamsValue, reqMsg)
+	if err != nil {
 		return nil, "", err
+	}
+	return base, sigParamsValue, nil
+}
+
+// buildBase constructs the signature base for an already serialized
+// @signature-params value. Verification passes the sender's own value, because
+// the signature covers its parameters in the order the sender wrote them.
+func buildBase(msg Message, components []ComponentIdentifier, sigParamsValue string, reqMsg Message) ([]byte, error) {
+	if err := validateComponents(components); err != nil {
+		return nil, err
 	}
 
 	var base strings.Builder
-
-	for _, c := range params.Components {
+	for _, c := range components {
 		value, err := extractComponent(c, msg, reqMsg)
 		if err != nil {
-			return nil, "", err
+			return nil, err
 		}
 		// Each component line: "<component-id>": <value>\n
 		base.WriteString(serializeComponentID(c))
@@ -39,15 +50,9 @@ func BuildSignatureBase(msg Message, params SignatureParameters, reqMsg Message)
 		base.WriteString(value)
 		base.WriteByte('\n')
 	}
-
-	// Build the @signature-params line
-	sfvParams := buildSFVParams(params)
-	sigParamsValue := SerializeSignatureParams(params.Components, sfvParams)
-
 	base.WriteString("\"@signature-params\": ")
 	base.WriteString(sigParamsValue)
-
-	return []byte(base.String()), sigParamsValue, nil
+	return []byte(base.String()), nil
 }
 
 func buildSFVParams(params SignatureParameters) *SFVParams {
