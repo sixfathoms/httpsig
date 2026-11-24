@@ -16,3 +16,4 @@ reactor-test = { module = "io.projectreactor:reactor-test", version = "3.8.8" }
 reactor-netty = { module = "io.projectreactor.netty:reactor-netty-http", version = "1.3.8" }
 
 [plugins]
+maven-publish = { id = "com.vanniktech.maven.publish", version = "0.37.0" }

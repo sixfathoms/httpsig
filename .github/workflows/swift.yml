@@ -2,9 +2,9 @@ name: Swift
 
 on:
   push:
-    paths: ['swift/**', 'testdata/**', '.github/workflows/swift.yml']
+    paths: ['Package.swift', 'swift/**', 'testdata/**', '.github/workflows/swift.yml']
   pull_request:
-    paths: ['swift/**', 'testdata/**', '.github/workflows/swift.yml']
+    paths: ['Package.swift', 'swift/**', 'testdata/**', '.github/workflows/swift.yml']
   workflow_dispatch:
 
 # Read-only token: this runs untrusted PR code (build/test) and needs no write access.
@@ -18,9 +18,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Build
-        working-directory: swift
         run: swift build
 
       - name: Test
-        working-directory: swift
         run: swift test

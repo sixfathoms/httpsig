@@ -2,7 +2,8 @@ name: Release Swift
 
 on:
   push:
-    tags: ['swift/v*']
+    # SwiftPM resolves versions only from plain semver tags.
+    tags: ['[0-9]+.[0-9]+.[0-9]+*']
 
 jobs:
   release:
@@ -13,12 +14,11 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Test
-        working-directory: swift
         run: swift test
 
       - name: Extract version
         id: version
-        run: echo "version=${GITHUB_REF#refs/tags/swift/v}" >> "$GITHUB_OUTPUT"
+        run: echo "version=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4

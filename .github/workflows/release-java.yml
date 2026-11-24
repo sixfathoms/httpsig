@@ -7,6 +7,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment: release
     permissions:
       contents: write
     steps:
@@ -29,7 +30,7 @@ jobs:
 
       - name: Publish to Maven Central
         working-directory: java
-        run: ./gradlew publishAllPublicationsToMavenCentralRepository
+        run: ./gradlew publishAndReleaseToMavenCentral -PreleaseVersion="${{ steps.version.outputs.version }}"
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.SONATYPE_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.SONATYPE_PASSWORD }}

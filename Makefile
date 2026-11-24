@@ -36,10 +36,10 @@ lint-java:
 
 # Swift
 test-swift:
-	cd swift && swift test
+	swift test
 
 build-swift:
-	cd swift && swift build
+	swift build
 
 # Kotlin
 test-kotlin:
@@ -67,6 +67,6 @@ clean:
 	cd golang && go clean ./...
 	rm -rf typescript/dist typescript/node_modules
 	cd java && ./gradlew clean || true
-	rm -rf swift/.build
+	rm -rf .build
 	cd kotlin && ./gradlew clean || true
 	rm -rf docs/build docs/.docusaurus

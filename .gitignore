@@ -28,10 +28,10 @@ kotlin/**/build/
 kotlin/bin/
 
 # Swift
-swift/.build/
-swift/.swiftpm/
-swift/Package.resolved
-swift/*.xcodeproj/
+.build/
+.swiftpm/
+Package.resolved
+*.xcodeproj/
 
 # Docs
 docs/node_modules/

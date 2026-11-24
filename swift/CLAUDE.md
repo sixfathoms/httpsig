@@ -3,7 +3,7 @@
 ## Build and Test
 
 ```bash
-cd swift
+# from the repository root: SwiftPM requires Package.swift there
 swift build     # compile all targets
 swift test      # run all tests
 ```

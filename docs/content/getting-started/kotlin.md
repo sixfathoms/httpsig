@@ -10,10 +10,10 @@ sidebar_position: 5
 
 ```kotlin
 dependencies {
-    implementation("dev.sixfathoms:httpsig-kotlin")
+    implementation("dev.sixfathoms:httpsig-kotlin:0.2.0")
 
     // Optional: OkHttp integration
-    implementation("dev.sixfathoms:httpsig-kotlin-okhttp")
+    implementation("dev.sixfathoms:httpsig-kotlin-okhttp:0.2.0")
 }
 ```
 

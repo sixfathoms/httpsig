@@ -15,32 +15,32 @@ let package = Package(
     targets: [
         .target(
             name: "HTTPSig",
-            path: "Sources/HTTPSig"
+            path: "swift/Sources/HTTPSig"
         ),
         .target(
             name: "HTTPSigURLSession",
             dependencies: ["HTTPSig"],
-            path: "Sources/HTTPSigURLSession"
+            path: "swift/Sources/HTTPSigURLSession"
         ),
         .target(
             name: "HTTPSigAlamofire",
             dependencies: ["HTTPSigURLSession", "Alamofire"],
-            path: "Sources/HTTPSigAlamofire"
+            path: "swift/Sources/HTTPSigAlamofire"
         ),
         .testTarget(
             name: "HTTPSigTests",
             dependencies: ["HTTPSig"],
-            path: "Tests/HTTPSigTests"
+            path: "swift/Tests/HTTPSigTests"
         ),
         .testTarget(
             name: "HTTPSigURLSessionTests",
             dependencies: ["HTTPSigURLSession", "HTTPSig"],
-            path: "Tests/HTTPSigURLSessionTests"
+            path: "swift/Tests/HTTPSigURLSessionTests"
         ),
         .testTarget(
             name: "HTTPSigAlamofireTests",
             dependencies: ["HTTPSigAlamofire", "HTTPSig"],
-            path: "Tests/HTTPSigAlamofireTests"
+            path: "swift/Tests/HTTPSigAlamofireTests"
         ),
     ]
 )
