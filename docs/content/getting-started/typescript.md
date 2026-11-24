@@ -10,7 +10,7 @@ sidebar_position: 2
 npm install @sixfathoms/httpsig
 ```
 
-Requires Node.js 20 or later. The package is ESM-only.
+Requires Node.js 22 or later. The package is ESM-only.
 
 ## Quick Example: Sign a Request
 

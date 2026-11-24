@@ -8,7 +8,7 @@ TypeScript implementation of [HTTP Message Signatures (RFC 9421)](https://www.rf
 npm install @sixfathoms/httpsig
 ```
 
-Requires Node.js 20+. ESM-only.
+Requires Node.js 22+. ESM-only.
 
 ## Usage
 

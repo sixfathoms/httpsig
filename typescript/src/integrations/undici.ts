@@ -4,7 +4,7 @@ import { signMessage, signatureInputHeader, signatureHeader } from "../signer.js
 
 /**
  * Minimal undici types so we don't require undici as a compile-time dependency.
- * Users who import this module will already have undici available (built into Node 20+).
+ * Users who import this module will already have undici available (built into Node 22+).
  */
 interface UndiciRequestOptions {
   method?: string;

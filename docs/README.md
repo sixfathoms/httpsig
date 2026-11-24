@@ -7,7 +7,7 @@ GitHub Pages at https://zrz.io/httpsig/.
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 22+
 - pnpm 10+ (`corepack enable` will provide it)
 
 ## Development
