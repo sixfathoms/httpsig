@@ -16,7 +16,7 @@ Monorepo with five language implementations sharing test vectors:
 ```
 httpsig/
   golang/          Go (package httpsig, Go 1.22+)
-  typescript/      TypeScript (@sixfathoms/httpsig, Node 20+, ESM)
+  typescript/      TypeScript (@sixfathoms/httpsig, Node 22+, ESM)
   java/            Java (dev.sixfathoms.httpsig, Java 17+, Gradle)
   swift/           Swift (HTTPSig, macOS 13+/iOS 16+, SPM, Swift 6.0)
   kotlin/          Kotlin JVM (dev.sixfathoms.httpsig, JVM 17+, Gradle)

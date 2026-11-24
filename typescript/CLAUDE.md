@@ -13,7 +13,7 @@ npm run build           # compile to dist/
 ## Conventions
 
 - Package: `@sixfathoms/httpsig`, ESM-only
-- Node.js 20+, zero runtime dependencies (axios is an optional peer dep)
+- Node.js 22+, zero runtime dependencies (axios is an optional peer dep)
 - All sign/verify APIs are `async` (returns `Promise`) for future Web Crypto compatibility
 - `newKeyPair()` / `newSigningKey()` / `newVerifyingKey()` auto-detect algorithm from `KeyObject`
 - `KeyPair` interface bundles `signingKey` + `verifyingKey` with `keyId` and `algorithm`
