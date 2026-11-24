@@ -250,14 +250,18 @@ func parseSignatureParams(params *SFVParams, components []ComponentIdentifier) (
 	}
 
 	if v, ok := params.Get("created"); ok {
-		if n, ok := v.(int64); ok {
-			sp.Created = &n
+		n, ok := v.(int64)
+		if !ok {
+			return sp, fmt.Errorf("%w: created must be an integer", ErrMalformedSignatureInput)
 		}
+		sp.Created = &n
 	}
 	if v, ok := params.Get("expires"); ok {
-		if n, ok := v.(int64); ok {
-			sp.Expires = &n
+		n, ok := v.(int64)
+		if !ok {
+			return sp, fmt.Errorf("%w: expires must be an integer", ErrMalformedSignatureInput)
 		}
+		sp.Expires = &n
 	}
 	if v, ok := params.Get("nonce"); ok {
 		if s, ok := v.(string); ok {

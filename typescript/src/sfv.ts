@@ -6,7 +6,7 @@ import type {
   SFVParams,
   ComponentIdentifier,
 } from "./types.js";
-import { SFVToken } from "./types.js";
+import { SFVDecimal, SFVToken } from "./types.js";
 import { MalformedInputError } from "./errors.js";
 
 // --- SFVParams helpers ---
@@ -37,6 +37,9 @@ export function serializeBareItem(value: SFVBareItem): string {
   if (value instanceof SFVToken) {
     return value.value;
   }
+  if (value instanceof SFVDecimal) {
+    return value.toString();
+  }
   if (value instanceof Uint8Array) {
     return ":" + uint8ToBase64(value) + ":";
   }
@@ -44,7 +47,9 @@ export function serializeBareItem(value: SFVBareItem): string {
     return '"' + value.replace(/\\/g, "\\\\").replace(/"/g, '\\"') + '"';
   }
   if (typeof value === "number") {
-    return Number.isInteger(value) ? String(value) : String(value);
+    return Number.isInteger(value)
+      ? String(value)
+      : new SFVDecimal(value).toString();
   }
   if (typeof value === "boolean") {
     return value ? "?1" : "?0";
@@ -239,22 +244,35 @@ class SFVParser {
     throw new MalformedInputError(`invalid boolean value '${c}'`);
   }
 
-  private parseNumber(): number {
+  private parseNumber(): number | SFVDecimal {
     const start = this.pos;
     if (this.peek() === "-") this.advance();
-    let isFloat = false;
-    while (this.pos < this.input.length && this.peek() >= "0" && this.peek() <= "9") {
-      this.advance();
+    const intDigits = this.consumeDigits();
+    if (intDigits === 0) {
+      throw new MalformedInputError(`invalid number at position ${start}`);
     }
-    if (this.pos < this.input.length && this.peek() === ".") {
-      isFloat = true;
-      this.advance();
-      while (this.pos < this.input.length && this.peek() >= "0" && this.peek() <= "9") {
-        this.advance();
-      }
+    if (this.peek() !== ".") {
+      return parseInt(this.input.slice(start, this.pos), 10);
     }
-    const str = this.input.slice(start, this.pos);
-    return isFloat ? parseFloat(str) : parseInt(str, 10);
+    if (intDigits > 12) {
+      throw new MalformedInputError(
+        `decimal has too many integer digits at position ${start}`,
+      );
+    }
+    this.advance(); // skip '.'
+    const fracDigits = this.consumeDigits();
+    if (fracDigits < 1 || fracDigits > 3) {
+      throw new MalformedInputError(
+        `decimal must have 1 to 3 fractional digits at position ${start}`,
+      );
+    }
+    return new SFVDecimal(Number(this.input.slice(start, this.pos)));
+  }
+
+  private consumeDigits(): number {
+    const start = this.pos;
+    while (this.peek() >= "0" && this.peek() <= "9") this.advance();
+    return this.pos - start;
   }
 
   private parseToken(): SFVToken {

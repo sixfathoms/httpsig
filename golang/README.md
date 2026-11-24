@@ -273,6 +273,7 @@ golang/
   middleware.go         VerifyMiddleware, RequireSignature
   pem.go               PEM parsing utilities
   sfv.go               Structured Field Values (RFC 8941) subset
+  decimal.go           SFV Decimal bare item
   signer.go            SignMessage, SignatureInputHeader, SignatureHeader
   transport.go         Signing http.RoundTripper
   verifier.go          VerifyMessage, VerifyOptions

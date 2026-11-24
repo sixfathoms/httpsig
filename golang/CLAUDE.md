@@ -47,3 +47,4 @@ go vet ./...           # static analysis
 | `base.go` | Signature base construction |
 | `components.go` | Derived component extraction |
 | `sfv.go` | RFC 8941 Structured Field Values parser/serializer |
+| `decimal.go` | SFV Decimal bare item |

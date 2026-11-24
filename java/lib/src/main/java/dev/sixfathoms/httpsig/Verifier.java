@@ -240,8 +240,8 @@ public final class Verifier {
         // extract signature metadata from the inner list's params
         SFV.Params metaParams = innerList.params();
 
-        Long created = toLong(metaParams.get("created"));
-        Long expires = toLong(metaParams.get("expires"));
+        Long created = timestamp(metaParams, "created");
+        Long expires = timestamp(metaParams, "expires");
         String keyId = metaParams.get("keyid") instanceof String s ? s : null;
         String algStr = metaParams.get("alg") instanceof String s ? s : null;
         String nonce = metaParams.get("nonce") instanceof String s ? s : null;
@@ -353,9 +353,11 @@ public final class Verifier {
         );
     }
 
-    private static Long toLong(Object v) {
+    private static Long timestamp(SFV.Params params, String key) throws HttpSigException {
+        if (!params.has(key)) return null;
+        Object v = params.get(key);
         if (v instanceof Long l) return l;
         if (v instanceof Integer i) return (long) i;
-        return null;
+        throw new HttpSigException(key + " must be an integer");
     }
 }

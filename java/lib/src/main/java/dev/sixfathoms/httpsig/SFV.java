@@ -1,5 +1,8 @@
 package dev.sixfathoms.httpsig;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.LinkedHashMap;
@@ -23,6 +26,46 @@ public final class SFV {
     /** An SFV Token (unquoted identifier). */
     public record Token(String value) {
         public Token { Objects.requireNonNull(value); }
+    }
+
+    /**
+     * An SFV Decimal (RFC 8941 Section 3.3.2): up to 12 integer digits and up to
+     * 3 fractional digits, held exactly as a count of thousandths.
+     */
+    public record Decimal(long thousandths) {
+        private static final long MAX = 999_999_999_999_999L;
+
+        public Decimal {
+            if (thousandths > MAX || thousandths < -MAX) {
+                throw new IllegalArgumentException("SFV decimal out of range");
+            }
+        }
+
+        /**
+         * Convert a value, rounding to 3 fractional digits with ties to even.
+         *
+         * @throws IllegalArgumentException if the value is out of range
+         */
+        public static Decimal of(BigDecimal value) {
+            BigInteger scaled = value.setScale(3, RoundingMode.HALF_EVEN).unscaledValue();
+            if (scaled.bitLength() > 63) {
+                throw new IllegalArgumentException("SFV decimal out of range");
+            }
+            return new Decimal(scaled.longValue());
+        }
+
+        public BigDecimal toBigDecimal() {
+            return BigDecimal.valueOf(thousandths, 3);
+        }
+
+        /** The canonical SFV serialization. */
+        @Override
+        public String toString() {
+            String s = toBigDecimal().toPlainString();
+            int end = s.length();
+            while (s.charAt(end - 1) == '0' && s.charAt(end - 2) != '.') end--;
+            return s.substring(0, end);
+        }
     }
 
     /** An SFV Item: a bare value plus optional parameters. */
@@ -160,6 +203,8 @@ public final class SFV {
             return i.toString();
         } else if (value instanceof Long l) {
             return l.toString();
+        } else if (value instanceof Decimal d) {
+            return d.toString();
         } else if (value instanceof Boolean b) {
             return b ? "?1" : "?0";
         } else if (value instanceof Token t) {
@@ -368,8 +413,7 @@ public final class SFV {
         }
 
         // -- Number --
-        // Returns Integer or Long depending on magnitude. Decimals not supported
-        // (we don't need them for signatures).
+        // Returns Integer or Long depending on magnitude, or Decimal.
 
         Object parseNumber() throws HttpSigException {
             int start = pos;
@@ -377,11 +421,20 @@ public final class SFV {
             if (eof() || !isDigit(peek())) {
                 throw new HttpSigException("invalid number at position " + start);
             }
+            int intStart = pos;
             while (!eof() && isDigit(peek())) pos++;
-            // check for decimal (not fully supported but let's at least not crash)
             if (!eof() && peek() == '.') {
+                if (pos - intStart > 12) {
+                    throw new HttpSigException("decimal has too many integer digits at position " + start);
+                }
                 pos++;
+                int fracStart = pos;
                 while (!eof() && isDigit(peek())) pos++;
+                int fracDigits = pos - fracStart;
+                if (fracDigits < 1 || fracDigits > 3) {
+                    throw new HttpSigException("decimal must have 1 to 3 fractional digits at position " + start);
+                }
+                return Decimal.of(new BigDecimal(input.substring(start, pos)));
             }
             String numStr = input.substring(start, pos);
             try {

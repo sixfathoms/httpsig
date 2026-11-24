@@ -13,7 +13,7 @@ import (
 
 // SFVItem is a single item in a Structured Field Value.
 type SFVItem struct {
-	Value  any // string, int64, []byte (binary), bool, Token
+	Value  any // string, int64, Decimal, []byte (binary), bool, Token
 	Params *SFVParams
 }
 
@@ -23,7 +23,7 @@ type Token string
 // SFVParams is an ordered parameter map.
 type SFVParams struct {
 	Keys   []string
-	Values map[string]any // string, int64, bool, Token, []byte
+	Values map[string]any // string, int64, Decimal, bool, Token, []byte
 }
 
 func NewSFVParams() *SFVParams {
@@ -137,6 +137,8 @@ func serializeBareItem(v any) string {
 		return strconv.FormatInt(val, 10)
 	case int:
 		return strconv.Itoa(val)
+	case Decimal:
+		return val.String()
 	case bool:
 		if val {
 			return "?1"
@@ -462,26 +464,53 @@ func (p *sfvParser) parseBoolean() (bool, error) {
 	}
 }
 
-func (p *sfvParser) parseNumber() (int64, error) {
+// parseNumber returns an int64 for an Integer or a Decimal for a Decimal.
+func (p *sfvParser) parseNumber() (any, error) {
 	start := p.pos
 	if p.pos < len(p.input) && p.input[p.pos] == '-' {
 		p.advance()
 	}
+	intStart := p.pos
 	if p.pos >= len(p.input) || p.input[p.pos] < '0' || p.input[p.pos] > '9' {
-		return 0, fmt.Errorf("sfv: invalid number at position %d", start)
+		return nil, fmt.Errorf("sfv: invalid number at position %d", start)
 	}
 	for p.pos < len(p.input) && p.input[p.pos] >= '0' && p.input[p.pos] <= '9' {
 		p.advance()
 	}
-	// Check for decimal (we'll handle as integer only for our needs)
 	if p.pos < len(p.input) && p.input[p.pos] == '.' {
-		return 0, fmt.Errorf("sfv: decimal numbers not supported in this subset")
+		return p.parseDecimalFraction(start, intStart)
 	}
 	n, err := strconv.ParseInt(p.input[start:p.pos], 10, 64)
 	if err != nil {
-		return 0, fmt.Errorf("sfv: %w", err)
+		return nil, fmt.Errorf("sfv: %w", err)
 	}
 	return n, nil
+}
+
+// parseDecimalFraction finishes a Decimal whose integer digits were consumed
+// from intStart and whose next byte is '.'.
+func (p *sfvParser) parseDecimalFraction(start, intStart int) (Decimal, error) {
+	intPart := p.input[intStart:p.pos]
+	if len(intPart) > 12 {
+		return Decimal{}, fmt.Errorf("sfv: decimal has too many integer digits at position %d", start)
+	}
+	p.advance()
+	fracStart := p.pos
+	for p.pos < len(p.input) && p.input[p.pos] >= '0' && p.input[p.pos] <= '9' {
+		p.advance()
+	}
+	frac := p.input[fracStart:p.pos]
+	if len(frac) < 1 || len(frac) > 3 {
+		return Decimal{}, fmt.Errorf("sfv: decimal must have 1 to 3 fractional digits at position %d", start)
+	}
+	n, err := strconv.ParseInt(intPart+frac+"000"[len(frac):], 10, 64)
+	if err != nil {
+		return Decimal{}, fmt.Errorf("sfv: %w", err)
+	}
+	if intStart > start {
+		n = -n
+	}
+	return Decimal{thousandths: n}, nil
 }
 
 func (p *sfvParser) parseToken() (Token, error) {
