@@ -8,11 +8,47 @@ public struct SFVToken: Sendable, Equatable, Hashable {
     public init(_ value: String) { self.value = value }
 }
 
+/// An SFV Decimal (RFC 8941 Section 3.3.2): up to 12 integer digits and up to
+/// 3 fractional digits, held exactly as a count of thousandths.
+public struct SFVDecimal: Sendable, Equatable, Hashable, CustomStringConvertible {
+    private static let maxThousandths: Int64 = 999_999_999_999_999
+
+    public let thousandths: Int64
+
+    /// Returns nil if the value is out of range.
+    public init?(thousandths: Int64) {
+        guard (-Self.maxThousandths...Self.maxThousandths).contains(thousandths) else { return nil }
+        self.thousandths = thousandths
+    }
+
+    /// Rounds to 3 fractional digits with ties to even.
+    /// Returns nil if the value is not a number or is out of range.
+    public init?(_ value: Decimal) {
+        let limit: Decimal = 1_000_000_000_000
+        guard !value.isNaN, value > -limit, value < limit else { return nil }
+        var input = value
+        var rounded = Decimal()
+        NSDecimalRound(&rounded, &input, 3, .bankers)
+        self.init(thousandths: NSDecimalNumber(decimal: rounded * 1000).int64Value)
+    }
+
+    public var decimalValue: Decimal { Decimal(thousandths) / 1000 }
+
+    /// The canonical SFV serialization.
+    public var description: String {
+        let magnitude = thousandths.magnitude
+        var frac = String(magnitude % 1000 + 1000).dropFirst()
+        while frac.count > 1 && frac.last == "0" { frac.removeLast() }
+        return (thousandths < 0 ? "-" : "") + String(magnitude / 1000) + "." + frac
+    }
+}
+
 /// A value in an SFV item. Using an enum because Swift's type system
 /// is not "any Hashable" friendly and we need a closed set anyway.
 public enum SFVValue: Sendable, Equatable, Hashable {
     case string(String)
     case int(Int64)
+    case decimal(SFVDecimal)
     case bool(Bool)
     case binary(Data)
     case token(SFVToken)
@@ -141,6 +177,8 @@ public enum SFV {
             return serializeString(s)
         case .int(let n):
             return String(n)
+        case .decimal(let d):
+            return d.description
         case .bool(let b):
             return b ? "?1" : "?0"
         case .binary(let data):
@@ -329,8 +367,7 @@ struct SFVParser: ~Copyable {
             let b = try parseBoolean()
             return .bool(b)
         case UInt8(ascii: "-"), UInt8(ascii: "0")...UInt8(ascii: "9"):
-            let n = try parseNumber()
-            return .int(n)
+            return try parseNumber()
         case UInt8(ascii: "*"),
              UInt8(ascii: "a")...UInt8(ascii: "z"),
              UInt8(ascii: "A")...UInt8(ascii: "Z"):
@@ -429,7 +466,8 @@ struct SFVParser: ~Copyable {
 
     // MARK: Number
 
-    mutating func parseNumber() throws -> Int64 {
+    /// Parses an Integer or a Decimal.
+    mutating func parseNumber() throws -> SFVValue {
         let start = pos
         if peekByte() == UInt8(ascii: "-") {
             advance()
@@ -437,18 +475,44 @@ struct SFVParser: ~Copyable {
         guard let ch = peekByte(), ch >= UInt8(ascii: "0") && ch <= UInt8(ascii: "9") else {
             throw HttpSigError.sfvParseError("invalid number at position \(start)")
         }
+        let intStart = pos
         while let ch = peekByte(), ch >= UInt8(ascii: "0") && ch <= UInt8(ascii: "9") {
             advance()
         }
-        // reject decimals
         if peekByte() == UInt8(ascii: ".") {
-            throw HttpSigError.sfvParseError("decimal numbers not supported in this subset")
+            return .decimal(try parseDecimalFraction(start: start, intStart: intStart))
         }
         let numStr = String(bytes: input[start..<pos], encoding: .utf8)!
         guard let n = Int64(numStr) else {
             throw HttpSigError.sfvParseError("number out of range: \(numStr)")
         }
-        return n
+        return .int(n)
+    }
+
+    /// Finishes a Decimal whose integer digits start at `intStart` and whose next byte is ".".
+    private mutating func parseDecimalFraction(start: Int, intStart: Int) throws -> SFVDecimal {
+        var digits = input[intStart..<pos]
+        guard digits.count <= 12 else {
+            throw HttpSigError.sfvParseError("decimal has too many integer digits at position \(start)")
+        }
+        advance()
+        let fracStart = pos
+        while let ch = peekByte(), ch >= UInt8(ascii: "0") && ch <= UInt8(ascii: "9") {
+            advance()
+        }
+        let frac = input[fracStart..<pos]
+        guard (1...3).contains(frac.count) else {
+            throw HttpSigError.sfvParseError(
+                "decimal must have 1 to 3 fractional digits at position \(start)"
+            )
+        }
+        digits += frac
+        var thousandths = digits.reduce(Int64(0)) { $0 * 10 + Int64($1 - UInt8(ascii: "0")) }
+        for _ in frac.count..<3 { thousandths *= 10 }
+        guard let value = SFVDecimal(thousandths: intStart > start ? -thousandths : thousandths) else {
+            throw HttpSigError.sfvParseError("number out of range at position \(start)")
+        }
+        return value
     }
 
     // MARK: Token

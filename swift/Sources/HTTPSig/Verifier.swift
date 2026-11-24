@@ -144,6 +144,14 @@ public enum Verifier {
         throw HttpSigError.invalidSignature("no signature verified: \(errors.joined(separator: "; "))")
     }
 
+    private static func timestamp(_ key: String, in params: SFVParams) throws -> Int64? {
+        guard params.has(key) else { return nil }
+        guard let value = params.getInt(key) else {
+            throw HttpSigError.malformedSignatureInput("\(key) must be an integer")
+        }
+        return value
+    }
+
     private static func verifySingle(
         label: String,
         sigInputEntry: SFVDictMember,
@@ -175,8 +183,8 @@ public enum Verifier {
         // Extract signature metadata from the inner list's params
         let metaParams = innerList.params
 
-        let created: Int64? = metaParams.getInt("created")
-        let expires: Int64? = metaParams.getInt("expires")
+        let created: Int64? = try timestamp("created", in: metaParams)
+        let expires: Int64? = try timestamp("expires", in: metaParams)
         let nonce: String? = metaParams.getString("nonce")
         let keyId: String? = metaParams.getString("keyid")
         let algStr: String? = metaParams.getString("alg")

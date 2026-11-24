@@ -1,5 +1,7 @@
 package dev.sixfathoms.httpsig
 
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.Base64
 
 /**
@@ -15,6 +17,38 @@ object SFV {
 
     /** An SFV Token (unquoted identifier). */
     data class Token(val value: String)
+
+    /**
+     * An SFV Decimal (RFC 8941 Section 3.3.2): up to 12 integer digits and up to
+     * 3 fractional digits, held exactly as a count of thousandths.
+     *
+     * @throws IllegalArgumentException if the value is out of range
+     */
+    data class Decimal(val thousandths: Long) {
+        init {
+            require(thousandths in -MAX..MAX) { "SFV decimal out of range" }
+        }
+
+        fun toBigDecimal(): BigDecimal = BigDecimal.valueOf(thousandths, 3)
+
+        /** The canonical SFV serialization. */
+        override fun toString(): String {
+            val s = toBigDecimal().toPlainString().trimEnd('0')
+            return if (s.endsWith('.')) s + "0" else s
+        }
+
+        companion object {
+            private const val MAX = 999_999_999_999_999L
+
+            /** Convert a value, rounding to 3 fractional digits with ties to even. */
+            @JvmStatic
+            fun of(value: BigDecimal): Decimal {
+                val scaled = value.setScale(3, RoundingMode.HALF_EVEN).unscaledValue()
+                require(scaled.bitLength() <= 63) { "SFV decimal out of range" }
+                return Decimal(scaled.toLong())
+            }
+        }
+    }
 
     /** An SFV Item: a bare value plus optional parameters. */
     data class Item(val value: Any?, val params: Params = Params.EMPTY)
@@ -119,6 +153,7 @@ object SFV {
         is ByteArray -> ":" + Base64.getEncoder().encodeToString(value) + ":"
         is Int -> value.toString()
         is Long -> value.toString()
+        is Decimal -> value.toString()
         is Boolean -> if (value) "?1" else "?0"
         is Token -> value.value
         else -> throw IllegalArgumentException("unsupported SFV bare item type: ${value?.javaClass}")
@@ -301,14 +336,19 @@ object SFV {
         private fun parseNumber(): Any {
             val start = pos
             if (!eof() && peek() == '-') pos++
-            if (eof() || !peek().isDigit()) {
+            val intDigits = consumeDigits()
+            if (intDigits == 0) {
                 throw HttpSigException("invalid number at position $start")
             }
-            while (!eof() && peek().isDigit()) pos++
-            // check for decimal
             if (!eof() && peek() == '.') {
+                if (intDigits > 12) {
+                    throw HttpSigException("decimal has too many integer digits at position $start")
+                }
                 pos++
-                while (!eof() && peek().isDigit()) pos++
+                if (consumeDigits() !in 1..3) {
+                    throw HttpSigException("decimal must have 1 to 3 fractional digits at position $start")
+                }
+                return Decimal.of(BigDecimal(input.substring(start, pos)))
             }
             val numStr = input.substring(start, pos)
             return try {
@@ -317,6 +357,13 @@ object SFV {
             } catch (e: NumberFormatException) {
                 throw HttpSigException("number out of range: $numStr")
             }
+        }
+
+        // ASCII only: Char.isDigit() also accepts other Unicode digits.
+        private fun consumeDigits(): Int {
+            val start = pos
+            while (!eof() && peek() in '0'..'9') pos++
+            return pos - start
         }
 
         // -- Token --

@@ -89,4 +89,4 @@ Response signatures that include request-bound components ensure that the respon
 
 ## Structured Field Values
 
-RFC 9421 relies heavily on Structured Field Values (RFC 8941) for serialization. All httpsig implementations include a built-in SFV parser and serializer to handle the dictionary, inner list, and parameter formats used in signature headers.
+RFC 9421 relies heavily on Structured Field Values (RFC 8941) for serialization. All httpsig implementations include a built-in SFV parser and serializer to handle the dictionary, inner list, and parameter formats used in signature headers. Integers and Decimals are distinct types, so a Decimal covered with `;key` is signed in canonical form: `1.50` becomes `1.5`, and `1.0` stays `1.0`. The `created` and `expires` parameters must be Integers.
