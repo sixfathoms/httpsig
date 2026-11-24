@@ -53,7 +53,7 @@ Each language implements the same core abstractions:
 | **KeyProvider** | Resolves keyId to VerifyingKey |
 | **Signer / Verifier** | Top-level sign and verify operations |
 | **ContentDigest** | RFC 9530 SHA-256/SHA-512 digest |
-| **SFV** | RFC 8941 Structured Field Values parser (subset) |
+| **SFV** | RFC 8941 Structured Field Values parser (subset: dictionaries, inner lists, all RFC 8941 bare item types) |
 
 ## HTTP Client Integrations
 

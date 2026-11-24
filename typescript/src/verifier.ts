@@ -14,7 +14,7 @@ import {
   MalformedInputError,
 } from "./errors.js";
 import { parseDictionary, serializeComponentId, sfvParamsGet } from "./sfv.js";
-import { buildSignatureBase } from "./base.js";
+import { buildSignatureBase, requireInteger } from "./base.js";
 
 /**
  * Verify a signature on a message.
@@ -165,10 +165,10 @@ function parseSignatureParams(
   if (!params) return sp;
 
   const created = sfvParamsGet(params, "created");
-  if (typeof created === "number") sp.created = created;
+  if (created !== undefined) sp.created = requireInteger("created", created);
 
   const expires = sfvParamsGet(params, "expires");
-  if (typeof expires === "number") sp.expires = expires;
+  if (expires !== undefined) sp.expires = requireInteger("expires", expires);
 
   const nonce = sfvParamsGet(params, "nonce");
   if (typeof nonce === "string") sp.nonce = nonce;

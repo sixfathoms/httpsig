@@ -4,7 +4,7 @@ import type {
   SignatureParameters,
   SFVParams,
 } from "./types.js";
-import { DuplicateComponentError } from "./errors.js";
+import { DuplicateComponentError, MalformedInputError } from "./errors.js";
 import {
   newSFVParams,
   sfvParamsSet,
@@ -40,10 +40,10 @@ export function buildSignatureBase(
 function buildSFVParams(params: SignatureParameters): SFVParams {
   let p = newSFVParams();
   if (params.created !== undefined) {
-    p = sfvParamsSet(p, "created", params.created);
+    p = sfvParamsSet(p, "created", requireInteger("created", params.created));
   }
   if (params.expires !== undefined) {
-    p = sfvParamsSet(p, "expires", params.expires);
+    p = sfvParamsSet(p, "expires", requireInteger("expires", params.expires));
   }
   if (params.keyId) {
     p = sfvParamsSet(p, "keyid", params.keyId);
@@ -58,6 +58,14 @@ function buildSFVParams(params: SignatureParameters): SFVParams {
     p = sfvParamsSet(p, "tag", params.tag);
   }
   return p;
+}
+
+/** Signature timestamps are SFV Integers; Decimals are not allowed (RFC 9421 Section 2.3). */
+export function requireInteger(name: string, value: unknown): number {
+  if (!Number.isInteger(value)) {
+    throw new MalformedInputError(`${name} must be an integer`);
+  }
+  return value as number;
 }
 
 function validateComponents(components: ComponentIdentifier[]): void {

@@ -127,8 +127,8 @@ object Verifier {
 
         // extract signature metadata from the inner list's params
         val metaParams = innerList.params
-        val created = toLong(metaParams["created"])
-        val expires = toLong(metaParams["expires"])
+        val created = timestamp(metaParams, "created")
+        val expires = timestamp(metaParams, "expires")
         val nonce = metaParams["nonce"] as? String
         val keyId = metaParams["keyid"] as? String
         val algStr = metaParams["alg"] as? String
@@ -227,9 +227,10 @@ object Verifier {
         )
     }
 
-    private fun toLong(v: Any?): Long? = when (v) {
+    private fun timestamp(params: SFV.Params, key: String): Long? = when (val v = params[key]) {
+        null -> null
         is Long -> v
         is Int -> v.toLong()
-        else -> null
+        else -> throw HttpSigException("$key must be an integer")
     }
 }

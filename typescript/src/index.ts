@@ -19,7 +19,7 @@ export type {
   VerifyResult,
   VerifyOptions,
 } from "./types.js";
-export { SFVToken } from "./types.js";
+export { SFVDecimal, SFVToken } from "./types.js";
 
 // Errors
 export {
