@@ -10,12 +10,12 @@ sidebar_position: 3
 
 ```kotlin
 dependencies {
-    implementation("dev.sixfathoms:httpsig")
+    implementation("dev.sixfathoms:httpsig:0.2.0")
 
     // Optional integrations (pick what you need):
-    implementation("dev.sixfathoms:httpsig-okhttp")
-    implementation("dev.sixfathoms:httpsig-jdk-http")
-    implementation("dev.sixfathoms:httpsig-spring-webclient")
+    implementation("dev.sixfathoms:httpsig-okhttp:0.2.0")
+    implementation("dev.sixfathoms:httpsig-jdk-http:0.2.0")
+    implementation("dev.sixfathoms:httpsig-spring-webclient:0.2.0")
 }
 ```
 
@@ -23,7 +23,7 @@ dependencies {
 
 ```groovy
 dependencies {
-    implementation 'dev.sixfathoms:httpsig'
+    implementation 'dev.sixfathoms:httpsig:0.2.0'
 }
 ```
 

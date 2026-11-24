@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.maven.publish)
 }
 
 kotlin {
@@ -15,7 +16,7 @@ java {
 
 dependencies {
     api(project(":lib"))
-    implementation(libs.ktor.client.core)
+    api(libs.ktor.client.core)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)

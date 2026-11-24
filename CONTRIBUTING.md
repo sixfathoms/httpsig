@@ -11,7 +11,7 @@ This is a multi-language monorepo. Each language lives in its own directory with
 | Go | `golang/` | `go test ./...` |
 | TypeScript | `typescript/` | `npm test` |
 | Java | `java/` | `./gradlew check` |
-| Swift | `swift/` | `swift test` |
+| Swift | `swift/` | `swift test` (from the repository root) |
 | Kotlin | `kotlin/` | `./gradlew check` |
 
 ## Development

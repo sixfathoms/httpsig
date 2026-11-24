@@ -8,7 +8,7 @@ Swift implementation of [HTTP Message Signatures (RFC 9421)](https://www.rfc-edi
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/sixfathoms/httpsig.git", from: "0.1.0")
+    .package(url: "https://github.com/sixfathoms/httpsig.git", from: "0.2.0")
 ]
 ```
 
@@ -140,8 +140,7 @@ Apple CryptoKit Ed25519 uses randomized signing (for side-channel resistance), s
 ## Development
 
 ```bash
-# Build
-cd swift
+# Build (from the repository root)
 swift build
 
 # Run all tests
@@ -154,8 +153,8 @@ swift test --filter VectorTests
 ### Project structure
 
 ```
+Package.swift                   SwiftPM manifest (repository root)
 swift/
-  Package.swift
   Sources/
     HTTPSig/                    Core library
       Algorithm.swift           Algorithm enum

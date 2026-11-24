@@ -32,7 +32,7 @@ httpsig/
 cd golang && go test -race ./...
 cd typescript && npm ci && npm test
 cd java && ./gradlew check
-cd swift && swift test
+swift test   # Package.swift is at the repository root
 cd kotlin && ./gradlew check
 
 # Docs (uses pnpm)
@@ -95,7 +95,9 @@ Each language implements the same core abstractions:
 
 ## Release Tags
 
-Convention: `{lang}/v{semver}` (e.g. `ts/v1.0.0`, `java/v1.0.0`, `swift/v1.0.0`, `kotlin/v1.0.0`). Go is `golang/v{semver}` (e.g. `golang/v1.0.0`): the Go toolchain reads a sub-directory module's versions only from tags prefixed with that directory, so a `go/v…` tag is invisible to `go get`.
+Convention: `{lang}/v{semver}` (e.g. `ts/v1.0.0`, `java/v1.0.0`, `kotlin/v1.0.0`). Go is `golang/v{semver}` (e.g. `golang/v1.0.0`): the Go toolchain reads a sub-directory module's versions only from tags prefixed with that directory, so a `go/v…` tag is invisible to `go get`. Swift is a bare `{semver}` (e.g. `1.0.0`): SwiftPM reads versions only from plain semver tags and needs `Package.swift` at the repository root.
+
+See [`RELEASING.md`](RELEASING.md) for registry setup.
 
 ## Conventions
 

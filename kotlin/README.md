@@ -7,11 +7,11 @@ Kotlin JVM implementation of [HTTP Message Signatures (RFC 9421)](https://www.rf
 ### Gradle
 
 ```kotlin
-implementation("dev.sixfathoms:httpsig-kotlin:0.1.0")
+implementation("dev.sixfathoms:httpsig-kotlin:0.2.0")
 
 // Optional integrations
-implementation("dev.sixfathoms:httpsig-kotlin-okhttp:0.1.0")
-implementation("dev.sixfathoms:httpsig-kotlin-ktor:0.1.0")
+implementation("dev.sixfathoms:httpsig-kotlin-okhttp:0.2.0")
+implementation("dev.sixfathoms:httpsig-kotlin-ktor:0.2.0")
 ```
 
 Requires JVM 17+. Kotlin 2.1+.

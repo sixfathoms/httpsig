@@ -7,12 +7,12 @@ Java implementation of [HTTP Message Signatures (RFC 9421)](https://www.rfc-edit
 ### Gradle
 
 ```kotlin
-implementation("dev.sixfathoms:httpsig:0.1.0")
+implementation("dev.sixfathoms:httpsig:0.2.0")
 
 // Optional integrations
-implementation("dev.sixfathoms:httpsig-okhttp:0.1.0")
-implementation("dev.sixfathoms:httpsig-jdk-http:0.1.0")
-implementation("dev.sixfathoms:httpsig-spring-webclient:0.1.0")
+implementation("dev.sixfathoms:httpsig-okhttp:0.2.0")
+implementation("dev.sixfathoms:httpsig-jdk-http:0.2.0")
+implementation("dev.sixfathoms:httpsig-spring-webclient:0.2.0")
 ```
 
 ### Maven

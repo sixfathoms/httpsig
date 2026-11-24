@@ -24,7 +24,7 @@ public record ComponentIdentifier(String name, Map<String, Object> params) {
         return new ComponentIdentifier(name, Map.of());
     }
 
-    /** @query-param with ;name=<name>. */
+    /** {@code @query-param} with {@code ;name=<name>}. */
     public static ComponentIdentifier queryParam(String name) {
         return new ComponentIdentifier("@query-param", Map.of("name", name));
     }

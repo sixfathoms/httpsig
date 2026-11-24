@@ -45,6 +45,12 @@
     "rsa-pss"
   ],
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sixfathoms/httpsig.git",
+    "directory": "typescript"
+  },
+  "homepage": "https://github.com/sixfathoms/httpsig#readme",
   "engines": {
     "node": ">=22"
   },
