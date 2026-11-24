@@ -7,6 +7,7 @@ import {
   signatureInputHeader,
   signatureHeader,
   buildSignatureBase,
+  buildSignatureBaseForVerification,
   verifyMessage,
   buildRequestMessage,
   component,
@@ -411,19 +412,14 @@ async function doVerify() {
       });
     }
 
-    // Crypto check: rebuild the base from the parsed params and verify the bytes.
+    // Crypto check: rebuild the base from the received Signature-Input and verify the bytes.
     const sigDict = parseDictionary(sigRaw);
     const sigBytes = sigDict.find((m: any) => m.key === label)?.item?.value as Uint8Array | undefined;
     let cryptoOk = false;
     try {
       const msg = buildRequestMessage(method, urlStr, headers);
-      const sigParams: any = { components: comps, keyId: keyid };
-      if (created !== undefined) sigParams.created = created;
-      if (expires !== undefined) sigParams.expires = expires;
-      if (nonce) sigParams.nonce = nonce;
-      if (tag) sigParams.tag = tag;
-      if (algParam) sigParams.algorithm = algParam;
-      const [base] = buildSignatureBase(msg, sigParams);
+      if (!member?.innerList) throw new Error("Signature-Input is not an inner list");
+      const base = buildSignatureBaseForVerification(msg, member.innerList);
       cryptoOk = sigBytes ? await verifyingKey.verify(base, sigBytes) : false;
     } catch (e: any) {
       rows.push({ ok: false, label: "rebuild signature base", detail: e.message });

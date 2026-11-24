@@ -242,12 +242,19 @@ public final class Verifier {
 
         Long created = timestamp(metaParams, "created");
         Long expires = timestamp(metaParams, "expires");
-        String keyId = metaParams.get("keyid") instanceof String s ? s : null;
-        String algStr = metaParams.get("alg") instanceof String s ? s : null;
-        String nonce = metaParams.get("nonce") instanceof String s ? s : null;
-        String tag = metaParams.get("tag") instanceof String s ? s : null;
+        String keyId = stringParam(metaParams, "keyid");
+        String algStr = stringParam(metaParams, "alg");
+        String nonce = stringParam(metaParams, "nonce");
+        String tag = stringParam(metaParams, "tag");
 
-        Algorithm algorithm = algStr != null ? Algorithm.fromValue(algStr) : null;
+        Algorithm algorithm = null;
+        if (algStr != null) {
+            try {
+                algorithm = Algorithm.fromValue(algStr);
+            } catch (IllegalArgumentException e) {
+                throw new HttpSigException(e.getMessage(), e);
+            }
+        }
 
         // check requirements (takes precedence) or fall back to requiredComponents
         var reqs = options.requirements();
@@ -351,6 +358,12 @@ public final class Verifier {
             expires,
             nonce
         );
+    }
+
+    private static String stringParam(SFV.Params params, String key) throws HttpSigException {
+        Object v = params.get(key);
+        if (v == null || v instanceof String) return (String) v;
+        throw new HttpSigException(key + " must be a string");
     }
 
     private static Long timestamp(SFV.Params params, String key) throws HttpSigException {

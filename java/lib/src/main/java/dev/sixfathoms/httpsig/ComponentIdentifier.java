@@ -1,5 +1,6 @@
 package dev.sixfathoms.httpsig;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -14,8 +15,8 @@ public record ComponentIdentifier(String name, Map<String, Object> params) {
 
     public ComponentIdentifier {
         Objects.requireNonNull(name, "name");
-        // defensive copy into an ordered map
-        params = Map.copyOf(new LinkedHashMap<>(params));
+        // Defensive copy. Map.copyOf would lose the order, which is signed.
+        params = Collections.unmodifiableMap(new LinkedHashMap<>(params));
     }
 
     /** Simple component with no params. */

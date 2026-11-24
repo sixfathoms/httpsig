@@ -144,6 +144,14 @@ public enum Verifier {
         throw HttpSigError.invalidSignature("no signature verified: \(errors.joined(separator: "; "))")
     }
 
+    private static func string(_ key: String, in params: SFVParams) throws -> String? {
+        guard params.has(key) else { return nil }
+        guard let value = params.getString(key) else {
+            throw HttpSigError.malformedSignatureInput("\(key) must be a string")
+        }
+        return value
+    }
+
     private static func timestamp(_ key: String, in params: SFVParams) throws -> Int64? {
         guard params.has(key) else { return nil }
         guard let value = params.getInt(key) else {
@@ -185,13 +193,18 @@ public enum Verifier {
 
         let created: Int64? = try timestamp("created", in: metaParams)
         let expires: Int64? = try timestamp("expires", in: metaParams)
-        let nonce: String? = metaParams.getString("nonce")
-        let keyId: String? = metaParams.getString("keyid")
-        let algStr: String? = metaParams.getString("alg")
-        let algorithm: Algorithm? = algStr.flatMap { Algorithm(rawValue: $0) }
+        let nonce: String? = try string("nonce", in: metaParams)
+        let keyId: String? = try string("keyid", in: metaParams)
+        let algStr: String? = try string("alg", in: metaParams)
+        let algorithm = try algStr.map { value -> Algorithm in
+            guard let algorithm = Algorithm(rawValue: value) else {
+                throw HttpSigError.malformedSignatureInput("unknown algorithm: \(value)")
+            }
+            return algorithm
+        }
 
         // Check requirements (takes precedence) or fall back to requiredComponents
-        let tag: String? = metaParams.getString("tag")
+        let tag: String? = try string("tag", in: metaParams)
         if let reqs = options.requirements {
             // Check required components
             if !reqs.components.isEmpty {
